@@ -1,5 +1,6 @@
 package com.ifgoiano.caixa2bank.services.account;
 
+import com.ifgoiano.caixa2bank.controllers.account.KeysExistisDTO;
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class KeysService {
         return keys;
     }
 
-    public List<Boolean> checkRegisteredKeys() {
+    public KeysExistisDTO checkRegisteredKeys() {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Account account = accountService.findByLogin(principal.getUsername());

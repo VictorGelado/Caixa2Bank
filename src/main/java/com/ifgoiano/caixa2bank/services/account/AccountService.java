@@ -60,7 +60,7 @@ public class AccountService {
 		Account account = this.findByLogin(principal.getUsername());
 
 		if (key.equals("cpf")) {
-			account.setPixCpf(account.getUser().getCpf());
+			if (repository.findByPix(account.getUser().getCpf()) == null) account.setPixCpf(account.getUser().getCpf());
 		} else if (key.equals("random")) {
 			UUID uuid;
 
@@ -70,9 +70,9 @@ public class AccountService {
 
 			account.setPixRandomKey(uuid.toString());
 		} else if (key.equals("email")) {
-			account.setPixEmail(account.getUser().getEmail());
+			if (repository.findByPix(account.getUser().getEmail()) == null) account.setPixEmail(account.getUser().getEmail());
 		} else if (key.equals("phone")) {
-			account.setPixPhone(account.getUser().getPhone());
+			if (repository.findByPix(account.getUser().getPhone()) == null) account.setPixPhone(account.getUser().getPhone());
 		}
 
 		this.updateAccount(account);

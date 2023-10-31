@@ -19,18 +19,18 @@
 
         </form>
 
-        <a th:href="@{/account/register-key/cpf}" th:if="${checkKeys.get(0)}">Registrar CPF</a><br><br>
-        <a th:href="@{/account/register-key/random}" th:if="${checkKeys.get(1)}">Registrar Random</a><br><br>
-        <a th:href="@{/account/register-key/email}" th:if="${checkKeys.get(2)}">Registrar Email</a><br><br>
-        <a th:href="@{/account/register-key/phone}" th:if="${checkKeys.get(3)}">Registrar phone</a><br><br>
+        <a th:href="@{/account/register-key/cpf}" th:if="${checkKeys.cpf()}">Registrar CPF</a><br><br>
+        <a th:href="@{/account/register-key/random}" th:if="${checkKeys.random()}">Registrar Random</a><br><br>
+        <a th:href="@{/account/register-key/email}" th:if="${checkKeys.email()}">Registrar Email</a><br><br>
+        <a th:href="@{/account/register-key/phone}" th:if="${checkKeys.phone()}">Registrar phone</a><br><br>
 
         <table th:if="${keys.size() > 0}">
             <thead>
                 <tr>
-                    <th th:if="${!checkKeys.get(0)}">CPF</th>
-                    <th th:if="${!checkKeys.get(1)}">Chave aleatória</th>
-                    <th th:if="${!checkKeys.get(2)}">Email</th>
-                    <th th:if="${!checkKeys.get(3)}">Telefone</th>
+                    <th th:if="${!checkKeys.cpf()}">CPF</th>
+                    <th th:if="${!checkKeys.random()}">Chave aleatória</th>
+                    <th th:if="${!checkKeys.email()}">Email</th>
+                    <th th:if="${!checkKeys.phone()}">Telefone</th>
                 </tr>
             </thead>
 

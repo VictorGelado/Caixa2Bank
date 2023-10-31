@@ -1,5 +1,6 @@
 package com.ifgoiano.caixa2bank.entities.account;
 
+import com.ifgoiano.caixa2bank.controllers.account.KeysExistisDTO;
 import com.ifgoiano.caixa2bank.entities.transaction.Transaction;
 import com.ifgoiano.caixa2bank.entities.user.User;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,15 +23,15 @@ import java.util.List;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "num_seq")
-    @SequenceGenerator(name = "num_seq", sequenceName = "number_seq", allocationSize = 1, initialValue = 100000)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="num_seq")
+    @SequenceGenerator(name="num_seq", sequenceName="number_seq", allocationSize=1, initialValue=100000)
     @Column(name="number", nullable=false, length = 6)
     private Integer number;
 
     @Column(name="password", nullable=false)
     private String password;
 
-    @Column(name="balance", nullable = false, columnDefinition = "default 0.0")
+    @Column(name="balance", nullable=false, columnDefinition="numeric(20,2) default 0.0")
     private BigDecimal balance;
 
     @Column(name="pix-random-key", nullable=true)
@@ -47,8 +49,11 @@ public class Account {
     @OneToOne
     User user;
 
-    @OneToMany
-    List<Transaction> transactions;
+    @OneToMany(mappedBy="sender")
+    List<Transaction> transactionsSent;
+
+    @OneToMany(mappedBy="receiver")
+    List<Transaction> transactionsReceived;
 
     public Account(String password, User user) {
         this.password = password;
@@ -67,12 +72,19 @@ public class Account {
         return keys;
     }
 
-    public List<Boolean> checkRegisteredKeys() {
+    public KeysExistisDTO checkRegisteredKeys() {
 
-        List<Boolean> registeredKeys = new ArrayList<Boolean>();
+        KeysExistisDTO registeredKeys = new KeysExistisDTO(
+            this.getPixCpf() == null,
+            this.getPixRandomKey() == null,
+            this.getPixPhone() == null,
+            this.getPixEmail() == null
+        );
 
-        if (this.getPixCpf() == null) {
-            registeredKeys.add(0, true);
+
+
+        /*if (this.getPixCpf() == null) {
+            registeredKeys.cpf(true);
         } else {
             registeredKeys.add(0, false);
         }
@@ -93,7 +105,7 @@ public class Account {
             registeredKeys.add(3, true);
         } else {
             registeredKeys.add(3, false);
-        }
+        }*/
 
 
         return registeredKeys;

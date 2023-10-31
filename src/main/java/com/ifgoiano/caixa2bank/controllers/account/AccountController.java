@@ -28,7 +28,7 @@ public class AccountController {
         List<String> keys = keysService.getKeysAccount();
         view.addObject("keys", keys);
 
-        List<Boolean> registeredKeys = keysService.checkRegisteredKeys();
+        KeysExistisDTO registeredKeys = keysService.checkRegisteredKeys();
         view.addObject("checkKeys", registeredKeys);
 
         return view;
@@ -43,7 +43,7 @@ public class AccountController {
         List<String> keys = keysService.getKeysAccount();
         view.addObject("keys", keys);
 
-        List<Boolean> registeredKeys = keysService.checkRegisteredKeys();
+        KeysExistisDTO registeredKeys = keysService.checkRegisteredKeys();
         view.addObject("checkKeys", registeredKeys);
 
         return view;
