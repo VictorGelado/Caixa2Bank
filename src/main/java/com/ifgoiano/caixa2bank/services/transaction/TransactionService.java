@@ -38,7 +38,10 @@ public class TransactionService {
 
             if (receiver == null) receiver = accountService.findByNumberAccount(Integer.parseInt(tr.receiver()));
 
-            Transaction transaction = new Transaction(tr.value()/*, Date.valueOf(LocalDate.now())*/, sender, receiver);
+            Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
+
+            System.out.println(LocalDateTime.now());
+
 
             transactionRepository.save(transaction);
 
