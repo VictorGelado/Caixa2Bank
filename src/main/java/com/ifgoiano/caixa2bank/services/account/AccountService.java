@@ -1,5 +1,6 @@
 package com.ifgoiano.caixa2bank.services.account;
 
+import com.ifgoiano.caixa2bank.email.EmailToUserService;
 import com.ifgoiano.caixa2bank.utils.CheckIsUUID;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,16 @@ import java.util.UUID;
 public class AccountService {
 
 	@Autowired
-	AccountRepository repository;
+	private AccountRepository repository;
 
 	@Autowired
-	CheckIsUUID checkIsUUID;
+	private CheckIsUUID checkIsUUID;
 
 	@Autowired
-	ReturnAccountByLogin returnAccountByLogin;
+	private ReturnAccountByLogin returnAccountByLogin;
+
+	@Autowired
+	private EmailToUserService emailToUserService;
 
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -36,8 +40,10 @@ public class AccountService {
 	
 	public void saveAccount(Account account) {
 		Account nAccount = new Account(passwordEncoder().encode(account.getPassword()), account.getUser());
-		
+
 		repository.save(nAccount);
+
+		emailToUserService.sendEmailCreatedAccount(account.getUser().getCpf());
 	}
 
 	public Account findByLogin(String login) {

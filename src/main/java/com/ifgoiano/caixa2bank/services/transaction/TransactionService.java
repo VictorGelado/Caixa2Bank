@@ -7,14 +7,18 @@ import com.ifgoiano.caixa2bank.repository.TransactionRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -38,15 +42,17 @@ public class TransactionService {
 
             if (receiver == null) receiver = accountService.findByNumberAccount(Integer.parseInt(tr.receiver()));
 
+            //LocalDateTime lDate = LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
+
             Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
-
-            System.out.println(LocalDateTime.now());
-
 
             transactionRepository.save(transaction);
 
-            receiver.setBalance(receiver.getBalance().add(tr.value()));
-            sender.setBalance(sender.getBalance().subtract(tr.value()));
+            if (sender.getBalance().compareTo(tr.value()) >= 0) {
+                receiver.setBalance(receiver.getBalance().add(tr.value()));
+                sender.setBalance(sender.getBalance().subtract(tr.value()));
+            } else throw new Exception("");
+
 
             accountService.updateAccount(receiver);
             accountService.updateAccount(sender);

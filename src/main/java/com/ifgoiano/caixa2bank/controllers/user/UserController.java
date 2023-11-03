@@ -1,5 +1,6 @@
 package com.ifgoiano.caixa2bank.controllers.user;
 
+import com.ifgoiano.caixa2bank.email.EmailService;
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.NewAccountDTO;
 import com.ifgoiano.caixa2bank.entities.user.User;
