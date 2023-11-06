@@ -1,6 +1,9 @@
 package com.ifgoiano.caixa2bank.websecurity;
 
 import com.ifgoiano.caixa2bank.services.user.UserService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +13,14 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -23,22 +28,23 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import java.io.IOException;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector).servletPath("/");
-
-		http
-			.csrf(csrf -> csrf.disable())
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
 			.authorizeHttpRequests((authorize) -> authorize
+				.requestMatchers("/admin/**").hasAuthority("admin")
+
 				.requestMatchers("/user/register").permitAll()
 				.requestMatchers("/user/login").permitAll()
 				.requestMatchers("/", "/home").permitAll()
@@ -48,7 +54,7 @@ public class SecurityConfig {
 			.formLogin(form -> form
 				.loginPage("/user/login")
 				.loginProcessingUrl("/user/login")
-				.defaultSuccessUrl("/user/dashboard")
+				.defaultSuccessUrl("/user/verify-role-user")
 				.failureUrl("/error")
 				.permitAll()
 			)
@@ -61,9 +67,8 @@ public class SecurityConfig {
 			);
 
 
-		return http.build();
-	}
-
+        return http.build();
+    }
 }
 
 

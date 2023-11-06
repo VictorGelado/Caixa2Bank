@@ -33,7 +33,7 @@ public class TransactionController {
     @PostMapping("/send")
     public ModelAndView sendCash(TransactionDTO tr) {
         transactionService.send(tr);
-        ModelAndView view = new ModelAndView("dashboard");
+        ModelAndView view = new ModelAndView("user-dashboard");
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.repository.AccountRepository;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -90,5 +92,9 @@ public class AccountService {
 		account = repository.findByPix(key);
 
 		return account;
+	}
+
+	public List<Account> findAll() {
+		return repository.findAll();
 	}
 }

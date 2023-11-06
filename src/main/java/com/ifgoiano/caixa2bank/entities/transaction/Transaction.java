@@ -24,10 +24,10 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id", nullable=false, length=6)
+    @Column(name="id", nullable=false, length=6, updatable = false)
     private Long id;
 
-    @Column(name="value", nullable = false, columnDefinition="numeric(20,2)")
+    @Column(name="value", nullable = false, columnDefinition="numeric(20,2)", updatable = false)
     private BigDecimal value;
 
     @Column(columnDefinition="TIMESTAMP with time zone", updatable = false)

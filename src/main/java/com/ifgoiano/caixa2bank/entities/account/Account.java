@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="num_seq")
     @SequenceGenerator(name="num_seq", sequenceName="number_seq", allocationSize=1, initialValue=100000)
-    @Column(name="number", nullable=false, length = 6)
+    @Column(name="number", nullable=false, length = 6, updatable = false)
     private Integer number;
 
     @Column(name="password", nullable=false)
@@ -80,33 +81,6 @@ public class Account {
             this.getPixPhone() == null,
             this.getPixEmail() == null
         );
-
-
-
-        /*if (this.getPixCpf() == null) {
-            registeredKeys.cpf(true);
-        } else {
-            registeredKeys.add(0, false);
-        }
-
-        if (this.getPixRandomKey() == null) {
-            registeredKeys.add(1, true);
-        } else {
-            registeredKeys.add(1, false);
-        }
-
-        if (this.getPixEmail() == null) {
-            registeredKeys.add(2, true);
-        } else {
-            registeredKeys.add(2, false);
-        }
-
-        if (this.getPixPhone() == null) {
-            registeredKeys.add(3, true);
-        } else {
-            registeredKeys.add(3, false);
-        }*/
-
 
         return registeredKeys;
     }

@@ -1,13 +1,10 @@
 package com.ifgoiano.caixa2bank.entities.user;
 
 import com.ifgoiano.caixa2bank.entities.account.NewAccountDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -17,7 +14,7 @@ import lombok.*;
 @Table(name="user_account")
 public class User {
 	@Id
-	@Column(name = "cpf", unique = true, nullable=false, length = 11)
+	@Column(name = "cpf", unique = true, nullable=false, length = 11, updatable = false)
 	private String cpf;
 
 	@Column(name = "username", nullable=false)
@@ -28,6 +25,12 @@ public class User {
 
 	@Column(name = "phone", nullable=false, unique = true)
 	public String phone;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_account_authorities",
+			joinColumns = @JoinColumn(name = "user_cpf"),
+			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
+	List<Authority> authorities;
 
 	public User (NewAccountDTO newAccountDTO) {
 		this.setUsername(newAccountDTO.username());

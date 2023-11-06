@@ -2,8 +2,10 @@ package com.ifgoiano.caixa2bank.services.user;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.NewAccountDTO;
+import com.ifgoiano.caixa2bank.entities.user.Authority;
 import com.ifgoiano.caixa2bank.entities.user.User;
 import com.ifgoiano.caixa2bank.repository.AccountRepository;
+import com.ifgoiano.caixa2bank.repository.AuthorityRepository;
 import com.ifgoiano.caixa2bank.repository.UserRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.websecurity.CustomUserDetails;
@@ -15,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -23,11 +28,22 @@ public class UserService implements UserDetailsService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     public void saveUser(User user) {
+        List<Authority> authorities = new ArrayList<Authority>();
+
+        Authority authority = authorityRepository.findById(2L).get();
+
+        authorities.add(authority);
+
+        user.setAuthorities(authorities);
+
         repository.save(user);
     }
 
