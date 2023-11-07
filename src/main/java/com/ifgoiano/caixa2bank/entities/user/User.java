@@ -26,16 +26,27 @@ public class User {
 	@Column(name = "phone", nullable=false, unique = true)
 	public String phone;
 
+	@Column(name = "admin-password", nullable = true)
+	public String adminPassword;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_account_authorities",
 			joinColumns = @JoinColumn(name = "user_cpf"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
 	List<Authority> authorities;
 
-	public User (NewAccountDTO newAccountDTO) {
+	public User (NewAccountDTO newAccountDTO) { // User
 		this.setUsername(newAccountDTO.username());
 		this.setCpf(newAccountDTO.cpf());
 		this.setEmail(newAccountDTO.email());
 		this.setPhone(newAccountDTO.phone());
+	}
+
+	public User(UserAdminDTO newUser) { // Admin
+		this.setUsername(newUser.username());
+		this.setAdminPassword(newUser.password());
+		this.setCpf(newUser.cpf());
+		this.setEmail(newUser.email());
+		this.setPhone(newUser.phone());
 	}
 }

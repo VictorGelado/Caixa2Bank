@@ -42,7 +42,7 @@ public class UserController {
 
 		userService.saveUser(user);
 
-		Account account = new Account(newAccountDTO.password(), user);
+		Account account = new Account(newAccountDTO.password(), newAccountDTO.passwordTransaction(), user);
 
 		accountService.saveAccount(account);
 

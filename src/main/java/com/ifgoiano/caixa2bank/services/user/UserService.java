@@ -10,6 +10,7 @@ import com.ifgoiano.caixa2bank.repository.UserRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.websecurity.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,26 @@ public class UserService implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        Account account = accountService.findByLogin(login);
+        User user = this.findByLogin(login);
+
+        if (account == null && user == null) throw new UsernameNotFoundException("User not exists");
+
+        if (account == null && user.getAuthorities().stream()
+                .noneMatch(authority -> authority.equals("admin"))) {
+
+            System.out.println("account null");
+            return new CustomUserDetails(login, user);
+        }
+        return new CustomUserDetails(login, account);
+    }
+
+    public User findByLogin(String login) {
+        return repository.findByLogin(login);
+    }
+
     public void saveUser(User user) {
         List<Authority> authorities = new ArrayList<Authority>();
 
@@ -47,13 +68,16 @@ public class UserService implements UserDetailsService {
         repository.save(user);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+    public void saveAdmin(User user) {
+        List<Authority> authorities = new ArrayList<Authority>();
 
-        Account account = accountService.findByLogin(login);
+        Authority authority = authorityRepository.findById(1L).get();
+        authorities.add(authority);
 
-        if (account == null) throw new UsernameNotFoundException("User not exists");
+        user.setAuthorities(authorities);
 
-        return new CustomUserDetails(login, account);
+        user.setAdminPassword(passwordEncoder().encode(user.getAdminPassword()));
+
+        repository.save(user);
     }
 }

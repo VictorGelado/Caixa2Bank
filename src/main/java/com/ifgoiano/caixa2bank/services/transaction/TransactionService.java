@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,6 +32,10 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    private PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @SneakyThrows
     public void send(TransactionDTO tr) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -44,11 +50,12 @@ public class TransactionService {
 
             //LocalDateTime lDate = LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
 
-            Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
+            if (sender.getBalance().compareTo(tr.value()) >= 0 &&
+                passwordEncoder().matches(sender.getPasswordTransaction(), tr.passwordTransaction())) {
+                Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
 
-            transactionRepository.save(transaction);
+                transactionRepository.save(transaction);
 
-            if (sender.getBalance().compareTo(tr.value()) >= 0) {
                 receiver.setBalance(receiver.getBalance().add(tr.value()));
                 sender.setBalance(sender.getBalance().subtract(tr.value()));
             } else throw new Exception("");

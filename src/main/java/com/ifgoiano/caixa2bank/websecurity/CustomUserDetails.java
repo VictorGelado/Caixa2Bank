@@ -2,6 +2,11 @@ package com.ifgoiano.caixa2bank.websecurity;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.user.Authority;
+import com.ifgoiano.caixa2bank.entities.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,25 +17,33 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private String login;
+    private String password;
+    private User user;
 
-    private Account account;
+    public CustomUserDetails(String login, Account account) {
+        if (account != null) {
+            this.login = login;
+            this.user = account.getUser();
+            this.password = account.getPassword();
+        }
+    }
 
-    public CustomUserDetails(String cpfOrAccount, Account account) {
-        this.login = cpfOrAccount;
-        this.account = account;
+    public CustomUserDetails(String login, User user) {
+        this.login = login;
+        this.password = user.getAdminPassword();
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Authority> authorities = account.getUser().getAuthorities();
-
-        if (authorities.isEmpty()) {
-            return Collections.singleton(new SimpleGrantedAuthority("user"));
-
-        }
+        List<Authority> authorities = user.getAuthorities();
 
         for (Authority a: authorities) {
             System.out.println(a.getName());
@@ -48,7 +61,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.account.getPassword();
+        return this.password;
     }
 
     @Override

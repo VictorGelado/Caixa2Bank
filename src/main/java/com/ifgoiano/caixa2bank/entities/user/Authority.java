@@ -19,4 +19,8 @@ public class Authority {
 
     @Column(unique = true)
     private String name;
+
+    public Authority(String name) {
+        this.name = name;
+    }
 }

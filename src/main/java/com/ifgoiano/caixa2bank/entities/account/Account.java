@@ -32,7 +32,7 @@ public class Account {
     @Column(name="password", nullable=false)
     private String password;
 
-    @Column(name="balance", nullable=false, columnDefinition="numeric(20,2) default 0.0")
+    @Column(name="balance", nullable=false, columnDefinition="numeric(20,2)")
     private BigDecimal balance;
 
     @Column(name="pix-random-key", nullable=true)
@@ -47,6 +47,9 @@ public class Account {
     @Column(name="pix-cpf", nullable=true)
     private String pixCpf;
 
+    @Column(name="password-transaction", nullable = false)
+    private String passwordTransaction;
+
     @OneToOne
     User user;
 
@@ -56,8 +59,9 @@ public class Account {
     @OneToMany(mappedBy="receiver")
     List<Transaction> transactionsReceived;
 
-    public Account(String password, User user) {
+    public Account(String password, String passwordTransaction, User user) {
         this.password = password;
+        this.setPasswordTransaction(passwordTransaction);
         this.user = user;
         this.setBalance(BigDecimal.valueOf(0));
     }

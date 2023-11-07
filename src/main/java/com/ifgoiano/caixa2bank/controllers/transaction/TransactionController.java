@@ -35,15 +35,13 @@ public class TransactionController {
         transactionService.send(tr);
         ModelAndView view = new ModelAndView("user-dashboard");
 
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         view.addObject("userData", userDataService.data());
 
         return view;
     }
 
     @GetMapping("/list")
-    public ModelAndView listAllTransactions(TransactionDTO tr) {
+    public ModelAndView listAllTransactions() {
         ModelAndView view = new ModelAndView("transactions");
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -13,8 +13,54 @@
 <body>
 <h1>Bem vindo admin</h1>
 
+<form th:action="@{/admin/register-admin}" method="post">
+    <h2>Sign In</h2>
+
+    <fieldset> <!-- Nome -->
+        <label for="username">Username: </label>
+        <input
+                type="text"
+                placeholder="123456"
+                id="username"
+                name="username"
+                required
+        >
+    </fieldset>
+
+    <fieldset> <!-- Senha -->
+        <label for="password">Senha</label>
+        <div>
+            <input type="password" placeholder="123456" id="password" name="password" required>
+            <i id="view-password">aaa</i><!-- colocar olhinho -->
+        </div>
+    </fieldset>
+
+    <fieldset> <!-- cpf -->
+        <label for="cpf">CPF: </label>
+        <div>
+            <input type="text" placeholder="123456" id="cpf" name="cpf" required>
+        </div>
+    </fieldset>
+
+    <fieldset> <!-- email -->
+        <label for="email">Email: </label>
+        <div>
+            <input type="email" placeholder="123456" id="email" name="email" required>
+        </div>
+    </fieldset>
+
+    <fieldset> <!-- telefone -->
+        <label for="phone">Telefone: </label>
+        <div>
+            <input type="tel" placeholder="123456" id="phone" name="phone" required>
+        </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary">Registrar</button>
+</form>
+
 <span>Username: </span> <span th:text="${userData}"></span> <br><br>
 
-<a th:href="@{/user/login}">login</a>
+<a th:href="@{/admin/list-all}">list-all</a>
 </body>
 </html>
