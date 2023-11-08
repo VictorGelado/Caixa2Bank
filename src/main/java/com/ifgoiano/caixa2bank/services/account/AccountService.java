@@ -1,7 +1,9 @@
 package com.ifgoiano.caixa2bank.services.account;
 
 import com.ifgoiano.caixa2bank.email.EmailToUserService;
+import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.DepositDTO;
+import com.ifgoiano.caixa2bank.repository.AccountRepository;
 import com.ifgoiano.caixa2bank.utils.CheckIsUUID;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.ifgoiano.caixa2bank.entities.account.Account;
-import com.ifgoiano.caixa2bank.repository.AccountRepository;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.UUID;

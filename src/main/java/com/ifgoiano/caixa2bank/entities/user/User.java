@@ -2,8 +2,13 @@ package com.ifgoiano.caixa2bank.entities.user;
 
 import com.ifgoiano.caixa2bank.entities.account.NewAccountDTO;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.core.serializer.Serializer;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Setter

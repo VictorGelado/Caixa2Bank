@@ -1,7 +1,7 @@
 package com.ifgoiano.caixa2bank.services.account;
 
-import com.ifgoiano.caixa2bank.controllers.account.KeysExistisDTO;
 import com.ifgoiano.caixa2bank.entities.account.Account;
+import com.ifgoiano.caixa2bank.entities.account.KeysExistisDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

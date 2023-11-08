@@ -1,6 +1,5 @@
 package com.ifgoiano.caixa2bank.utils;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;

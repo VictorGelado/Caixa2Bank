@@ -1,16 +1,14 @@
 package com.ifgoiano.caixa2bank.services.user;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
-import com.ifgoiano.caixa2bank.entities.account.NewAccountDTO;
 import com.ifgoiano.caixa2bank.entities.user.Authority;
 import com.ifgoiano.caixa2bank.entities.user.User;
-import com.ifgoiano.caixa2bank.repository.AccountRepository;
 import com.ifgoiano.caixa2bank.repository.AuthorityRepository;
 import com.ifgoiano.caixa2bank.repository.UserRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.websecurity.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

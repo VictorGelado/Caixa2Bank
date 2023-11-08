@@ -1,5 +1,6 @@
 package com.ifgoiano.caixa2bank.controllers.account;
 
+import com.ifgoiano.caixa2bank.entities.account.KeysExistisDTO;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.services.account.KeysService;
 import org.springframework.beans.factory.annotation.Autowired;

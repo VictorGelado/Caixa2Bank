@@ -1,26 +1,21 @@
 package com.ifgoiano.caixa2bank.services.transaction;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
+import com.ifgoiano.caixa2bank.entities.transaction.ListTransactionDTO;
 import com.ifgoiano.caixa2bank.entities.transaction.Transaction;
 import com.ifgoiano.caixa2bank.entities.transaction.TransactionDTO;
 import com.ifgoiano.caixa2bank.repository.TransactionRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,7 +46,7 @@ public class TransactionService {
             //LocalDateTime lDate = LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
 
             if (sender.getBalance().compareTo(tr.value()) >= 0 &&
-                passwordEncoder().matches(sender.getPasswordTransaction(), tr.passwordTransaction())) {
+                passwordEncoder().matches(tr.passwordTransaction(), sender.getPasswordTransaction())) {
                 Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
 
                 transactionRepository.save(transaction);
@@ -66,9 +61,28 @@ public class TransactionService {
         }
     }
 
-    public List<Transaction> findAllTransactions(Account account) {
+    public List<ListTransactionDTO> findAllTransactions(Account account) {
         List<Transaction> allTransactions = transactionRepository.findAllTransactions(account);
+        List<ListTransactionDTO> transactions = new ArrayList<ListTransactionDTO>();
 
-        return allTransactions;
+        allTransactions.forEach(t -> {
+            String sender = t.getSender().getUser().getUsername();
+            String receiver = t.getReceiver().getUser().getUsername();
+
+            if (account.getUser().getCpf().equals(t.getSender().getUser().getCpf())) sender = "Você";
+            else if (account.getUser().getCpf().equals(t.getReceiver().getUser().getCpf())) receiver = "Você";
+
+            ListTransactionDTO transaction = new ListTransactionDTO(
+                t.getId(),
+                sender,
+                t.getValue(),
+                receiver,
+                t.getTime()
+            );
+
+            transactions.add(transaction);
+        });
+
+        return transactions;
     }
 }

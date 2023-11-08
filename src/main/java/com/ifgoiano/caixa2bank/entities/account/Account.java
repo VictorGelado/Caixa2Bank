@@ -1,6 +1,5 @@
 package com.ifgoiano.caixa2bank.entities.account;
 
-import com.ifgoiano.caixa2bank.controllers.account.KeysExistisDTO;
 import com.ifgoiano.caixa2bank.entities.transaction.Transaction;
 import com.ifgoiano.caixa2bank.entities.user.User;
 import jakarta.persistence.*;
@@ -8,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

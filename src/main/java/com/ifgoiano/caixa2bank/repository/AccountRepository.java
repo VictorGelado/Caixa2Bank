@@ -3,8 +3,6 @@ package com.ifgoiano.caixa2bank.repository;
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.repository.query.Param;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 

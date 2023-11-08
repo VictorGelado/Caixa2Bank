@@ -10,9 +10,9 @@
 </head>
 <body>
 <div th:each="transaction: ${transactions}">
-    <span th:text="'Id = ' + ${transaction.getId()}"></span>   <span th:text="'Receiver = ' + ${transaction.getReceiver()}"></span>
-    <span th:text="'Sender = ' + ${transaction.getSender()}"></span>   <span th:text="'Valor = ' + ${transaction.getValue()}"></span>
-    <span th:text="'Tempo = ' + ${transaction.getTime()}"></span>
+    <span th:text="'Id = ' + ${transaction.id()}"></span>   <span th:text="'Receiver = ' + ${transaction.receiver()}"></span>
+    <span th:text="'Sender = ' + ${transaction.sender()}"></span>   <span th:text="'Valor = ' + ${transaction.value()}"></span>
+    <span th:text="'Tempo = ' + ${transaction.time()}"></span>
     <hr>
     <br>
 </div>

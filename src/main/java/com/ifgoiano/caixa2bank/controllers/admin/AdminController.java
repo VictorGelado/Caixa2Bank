@@ -2,7 +2,6 @@ package com.ifgoiano.caixa2bank.controllers.admin;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.DepositDTO;
-import com.ifgoiano.caixa2bank.entities.account.NewAccountDTO;
 import com.ifgoiano.caixa2bank.entities.user.User;
 import com.ifgoiano.caixa2bank.entities.user.UserAdminDTO;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
@@ -66,7 +65,7 @@ public class AdminController {
     public String deposit(DepositDTO depositDTO) {
         accountService.deposit(depositDTO);
 
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/list-all";
     }
 
 
