@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -66,20 +63,9 @@ public class TransactionController {
     }
 
     @GetMapping("/pdf")
-    public String generatePdf(HttpServletResponse response) throws IOException, DocumentException {
-        response.setContentType("application/pdf");
-        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
-        String currentDateTime = dateFormat.format(new Date());
-        String headerkey = "Content-Disposition";
-        String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-        response.setHeader(headerkey, headervalue);
+    public void generatePdf(HttpServletResponse response) throws IOException, DocumentException {
+        pdfGenerator.generatePdf(response);
 
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account = accountService.findByLogin(principal.getUsername());
-
-        List<ListTransactionDTO> transactions = transactionService.findAllTransactions(account);
-
-        pdfGenerator.generatePdf(response, transactions);
-        return "redirect:/user/dashboard";
+        //return "redirect:/user/dashboard";
     }
 }

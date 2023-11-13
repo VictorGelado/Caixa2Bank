@@ -8,7 +8,6 @@ import com.ifgoiano.caixa2bank.repository.UserRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.websecurity.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,7 +43,6 @@ public class UserService implements UserDetailsService {
         if (account == null && user.getAuthorities().stream()
                 .noneMatch(authority -> authority.equals("admin"))) {
 
-            System.out.println("account null");
             return new CustomUserDetails(login, user);
         }
         return new CustomUserDetails(login, account);
@@ -70,9 +68,12 @@ public class UserService implements UserDetailsService {
         List<Authority> authorities = new ArrayList<Authority>();
 
         Authority authority = authorityRepository.findById(1L).get();
+
         authorities.add(authority);
 
         user.setAuthorities(authorities);
+
+        System.out.println(user.getAdminPassword());
 
         user.setAdminPassword(passwordEncoder().encode(user.getAdminPassword()));
 

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -64,6 +65,13 @@ public class AdminController {
     @PostMapping("/deposit")
     public String deposit(DepositDTO depositDTO) {
         accountService.deposit(depositDTO);
+
+        return "redirect:/admin/list-all";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteUser(RedirectAttributes attr, @PathVariable int id) {
+        accountService.deleteAccount(id);
 
         return "redirect:/admin/list-all";
     }

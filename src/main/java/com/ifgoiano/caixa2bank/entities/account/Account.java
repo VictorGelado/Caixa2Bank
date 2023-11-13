@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class Account {
     @Column(name="password", nullable=false)
     private String password;
 
-    @Column(name="balance", nullable=false, columnDefinition="numeric(20,2)")
+    @Column(name="balance", nullable=false)
     private BigDecimal balance;
 
     @Column(name="pix-random-key", nullable=true)
@@ -48,13 +47,13 @@ public class Account {
     @Column(name="password-transaction", nullable = false)
     private String passwordTransaction;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     User user;
 
-    @OneToMany(mappedBy="sender")
+    @OneToMany(mappedBy="sender", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Transaction> transactionsSent;
 
-    @OneToMany(mappedBy="receiver")
+    @OneToMany(mappedBy="receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Transaction> transactionsReceived;
 
     public Account(String password, String passwordTransaction, User user) {

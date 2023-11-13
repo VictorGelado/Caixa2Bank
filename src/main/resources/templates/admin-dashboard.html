@@ -13,54 +13,13 @@
 <body>
 <h1>Bem vindo admin</h1>
 
-<form th:action="@{/admin/register-admin}" method="post">
-    <h2>Sign In</h2>
+<button id="new-admin">Cadastrar novo admin</button>
 
-    <fieldset> <!-- Nome -->
-        <label for="username">Username: </label>
-        <input
-                type="text"
-                placeholder="123456"
-                id="username"
-                name="username"
-                required
-        >
-    </fieldset>
+<div th:replace="~{/fragments/form.html :: register-admin}"></div>
 
-    <fieldset> <!-- Senha -->
-        <label for="password">Senha</label>
-        <div>
-            <input type="password" placeholder="123456" id="password" name="password" required>
-            <i id="view-password">aaa</i><!-- colocar olhinho -->
-        </div>
-    </fieldset>
+<a th:href="@{/admin/list-all}"><button>Listar usuários</button></a>
 
-    <fieldset> <!-- cpf -->
-        <label for="cpf">CPF: </label>
-        <div>
-            <input type="text" placeholder="123456" id="cpf" name="cpf" required>
-        </div>
-    </fieldset>
-
-    <fieldset> <!-- email -->
-        <label for="email">Email: </label>
-        <div>
-            <input type="email" placeholder="123456" id="email" name="email" required>
-        </div>
-    </fieldset>
-
-    <fieldset> <!-- telefone -->
-        <label for="phone">Telefone: </label>
-        <div>
-            <input type="tel" placeholder="123456" id="phone" name="phone" required>
-        </div>
-    </fieldset>
-
-    <button type="submit" class="btn btn-primary">Registrar</button>
-</form>
-
-<span>Username: </span> <span th:text="${userData}"></span> <br><br>
-
-<a th:href="@{/admin/list-all}">list-all</a>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
+<script th:src="@{/js/admin-dashboard.js}" type="text/javascript"></script>
 </body>
 </html>

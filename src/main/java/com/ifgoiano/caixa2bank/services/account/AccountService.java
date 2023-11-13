@@ -1,11 +1,12 @@
 package com.ifgoiano.caixa2bank.services.account;
 
-import com.ifgoiano.caixa2bank.email.EmailToUserService;
+import com.ifgoiano.caixa2bank.email.EmailCreateUserService;
+import com.ifgoiano.caixa2bank.email.EmailService;
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.DepositDTO;
 import com.ifgoiano.caixa2bank.repository.AccountRepository;
-import com.ifgoiano.caixa2bank.utils.CheckIsUUID;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,19 +28,41 @@ public class AccountService {
 	private AccountRepository repository;
 
 	@Autowired
-	private CheckIsUUID checkIsUUID;
-
-	@Autowired
 	private ReturnAccountByLogin returnAccountByLogin;
 
 	@Autowired
-	private EmailToUserService emailToUserService;
+	private EmailCreateUserService emailToUserService;
+
+	@Autowired
+	private EmailService emailService;
 
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Transactional
 	public void updateAccount(Account account) {
+		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		Account accountDB = findByLogin(principal.getUsername());
+
+		if (account != accountDB) {
+			accountDB.getUser().setUsername(account.getUser().getUsername());
+			accountDB.getUser().setEmail(account.getUser().getEmail());
+			accountDB.getUser().setPhone(account.getUser().getPhone());
+
+            if (!accountDB.getPixCpf().equals(account.getPixCpf())) accountDB.setPixCpf(account.getPixCpf());
+
+			if (!accountDB.getPixEmail().equals(account.getPixEmail())) accountDB.setPixEmail(account.getPixEmail());
+
+			if (!accountDB.getPixPhone().equals(account.getPixPhone())) accountDB.setPixPhone(account.getPixPhone());
+
+			repository.saveAndFlush(accountDB);
+
+			return;
+		}
+
+
 		repository.save(account);
 	}
 	
@@ -60,41 +86,41 @@ public class AccountService {
 	}
 
 	public Account findByNumberAccount(int number) {
-		Account account = repository.findByNumberAccount(number);
-
-		return account;
+		return repository.findByNumberAccount(number);
 	}
 
 	public void saveKey(String key) {
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Account account = this.findByLogin(principal.getUsername());
+		Account account = findByLogin(principal.getUsername());
 
-		if (key.equals("cpf")) {
-			if (repository.findByPix(account.getUser().getCpf()) == null) account.setPixCpf(account.getUser().getCpf());
-		} else if (key.equals("random")) {
-			UUID uuid;
+        switch (key) {
+            case "cpf" -> {
+                if (repository.findByPix(account.getUser().getCpf()) == null)
+                    account.setPixCpf(account.getUser().getCpf());
+            }
+            case "random" -> {
+                UUID uuid;
+                do {
+                    uuid = UUID.randomUUID();
+                } while (repository.findByPix(uuid.toString()) != null); // Verify exists random key in database
+                account.setPixRandomKey(uuid.toString());
+            }
+            case "email" -> {
+                if (repository.findByPix(account.getUser().getEmail()) == null)
+                    account.setPixEmail(account.getUser().getEmail());
+            }
+            case "phone" -> {
+                if (repository.findByPix(account.getUser().getPhone()) == null)
+                    account.setPixPhone(account.getUser().getPhone());
+            }
+        }
 
-			do {
-				uuid = UUID.randomUUID();
-			} while (repository.findByPix(uuid.toString()) != null); // Verify exists random key in data base
-
-			account.setPixRandomKey(uuid.toString());
-		} else if (key.equals("email")) {
-			if (repository.findByPix(account.getUser().getEmail()) == null) account.setPixEmail(account.getUser().getEmail());
-		} else if (key.equals("phone")) {
-			if (repository.findByPix(account.getUser().getPhone()) == null) account.setPixPhone(account.getUser().getPhone());
-		}
-
-		this.updateAccount(account);
+		repository.save(account);
 	}
 
 	public Account findByPix(String key) {
-		Account account = null;
-
-		account = repository.findByPix(key);
-
-		return account;
+		return repository.findByPix(key);
 	}
 
 	public List<Account> findAll() {
@@ -108,6 +134,54 @@ public class AccountService {
 
 		account.setBalance(account.getBalance().add(depositDTO.value()));
 
-		this.updateAccount(account);
+		repository.save(account);
+	}
+
+	public void deleteAccount(int id) {
+		repository.deleteById(id);
+	}
+
+	@Transactional
+	public void updatePassword(Account account, boolean passwordLogin) {
+		if (passwordLogin) {
+			account.setPassword(passwordEncoder().encode(account.getPassword()));
+			repository.changePasswordByNumberAccount(account.getNumber(), account.getPassword());
+		} else {
+			account.setPasswordTransaction(passwordEncoder().encode(account.getPasswordTransaction()));
+			repository.changePasswordTransactionByNumberAccount(account.getNumber(), account.getPasswordTransaction());
+		}
+	}
+
+	public void sendEmailForgotPassword(String login) throws MessagingException {
+		String code = Base64.getEncoder().encodeToString(login.getBytes());
+
+		Account account = findByLogin(login);
+
+		emailService.sendEmailForgotPassword(account, code);
+	}
+
+	@Transactional
+	public void updateBalance(int number, BigDecimal balance) {
+		repository.updateBalance(number, balance);
 	}
 }
+
+
+/*
+*
+* if (key.equals("cpf")) {
+			if (repository.findByPix(account.getUser().getCpf()) == null) account.setPixCpf(account.getUser().getCpf());
+		} else if (key.equals("random")) {
+			UUID uuid;
+
+			do {
+				uuid = UUID.randomUUID();
+			} while (repository.findByPix(uuid.toString()) != null); // Verify exists random key in database
+
+			account.setPixRandomKey(uuid.toString());
+		} else if (key.equals("email")) {
+			if (repository.findByPix(account.getUser().getEmail()) == null) account.setPixEmail(account.getUser().getEmail());
+		} else if (key.equals("phone")) {
+			if (repository.findByPix(account.getUser().getPhone()) == null) account.setPixPhone(account.getUser().getPhone());
+		}
+* */

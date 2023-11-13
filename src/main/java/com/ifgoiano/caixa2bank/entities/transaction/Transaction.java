@@ -25,7 +25,7 @@ public class Transaction {
     @Column(name="id", nullable=false, length=6, updatable = false)
     private Long id;
 
-    @Column(name="value", nullable = false, columnDefinition="numeric(20,2)", updatable = false)
+    @Column(name="value", nullable = false, updatable = false)
     private BigDecimal value;
 
     @Column(columnDefinition="TIMESTAMP with time zone", updatable = false)

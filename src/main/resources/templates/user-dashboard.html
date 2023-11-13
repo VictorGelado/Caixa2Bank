@@ -19,9 +19,12 @@
 <span>cpf: </span> <span th:text="${userData.cpf()}"></span> <br><br>
 
 <form th:action="@{/transaction/send}" method="post">
+    <label>Digite o valor</label>
     <input type="number" name="value">
+    <label>Digite o pix ou número da conta</label>
     <input type="text" name="receiver">
-    <input type="text" name="passwordTransaction">
+    <label>Digite a senha de transação</label>
+    <input type="number" name="passwordTransaction">
 
     <button type="submit">Enviar</button>
 </form>
@@ -30,7 +33,7 @@
 
 <a th:href="@{/transaction/list}">Transações</a>
 
-<a th:href="@{/alter/{id}(id=${userData.number()})}">view</a>
+<a th:href="@{/user/update/{id}(id=${userData.number()})}">Editar dados</a>
 
 <a th:href="@{/user/logout}">aa</a>
 </body>

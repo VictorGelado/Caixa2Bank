@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailToUserService {
+public class EmailCreateUserService {
 
     @Autowired
     private EmailService emailService;

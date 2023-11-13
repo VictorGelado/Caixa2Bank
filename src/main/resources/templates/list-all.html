@@ -31,6 +31,7 @@
             <td th:text="${user.getNumber()}"></td>
             <td th:text="${user.getBalance()}"></td>
             <td th:text="${user.getUser().getEmail()}"></td>
+            <td><a th:href="@{/admin/delete/{id}(id=${user.getNumber()})}"><button>Excluir user</button></a></td>
         </tr>
         </tbody>
     </table>

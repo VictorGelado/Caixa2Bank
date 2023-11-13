@@ -2,17 +2,13 @@ package com.ifgoiano.caixa2bank.repository;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.math.BigDecimal;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-
-
-    //select (password) from account  where account like 'jose' OR user_cpf like '123456789012'
-    //@Query("select u from Account u where u.number = :account OR u.user.cpf like :cpf")
-   // Account findByAccountNumberOrCpf(@Param("userId") String cpf,  @Param("cpf") int account);
-
-   // @Query("SELECT a FROM Account a WHERE a.user.id = :userId OR a.cpf = :cpf")
-   // List<Account> findByUserIdOrCpf(@Param("userId") Long userId, @Param("cpf") String cpf);
 
     Account findByNumber(int account);
 
@@ -25,9 +21,19 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("select u from Account u where u.user.email like :email")
     Account findByEmail(String email);
 
-
-//u.number = :key OR
     @Query("select u from Account u where u.pixRandomKey like :key " +
             "OR u.pixCpf like :key OR u.pixEmail like :key OR u.pixPhone like :key")
     Account findByPix(String key);
+
+    @Modifying
+    @Query("update Account a set a.password = :newPassword where a.number = :number")
+    void changePasswordByNumberAccount(@Param("number") int number, @Param("newPassword") String password);
+
+    @Modifying
+    @Query("update Account a set a.passwordTransaction = :passwordT where a.number = :number")
+    void changePasswordTransactionByNumberAccount(@Param("number") int number, @Param("passwordT") String passwordTransaction);
+
+    @Modifying
+    @Query("update Account a set a.balance = :balance where a.number = :number")
+    void updateBalance(@Param("number") int number, @Param("balance") BigDecimal balance);
 }

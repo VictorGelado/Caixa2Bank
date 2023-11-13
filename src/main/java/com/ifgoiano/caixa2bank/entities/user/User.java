@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.core.serializer.Serializer;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Setter
@@ -16,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user_account")
+@Table(name="users")
 public class User {
 	@Id
 	@Column(name = "cpf", unique = true, nullable=false, length = 11, updatable = false)
@@ -35,7 +33,7 @@ public class User {
 	public String adminPassword;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_account_authorities",
+	@JoinTable(name = "user_authorities",
 			joinColumns = @JoinColumn(name = "user_cpf"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
 	List<Authority> authorities;

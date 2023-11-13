@@ -47,17 +47,17 @@ public class TransactionService {
 
             if (sender.getBalance().compareTo(tr.value()) >= 0 &&
                 passwordEncoder().matches(tr.passwordTransaction(), sender.getPasswordTransaction())) {
-                Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
-
-                transactionRepository.save(transaction);
-
                 receiver.setBalance(receiver.getBalance().add(tr.value()));
                 sender.setBalance(sender.getBalance().subtract(tr.value()));
             } else throw new Exception("");
 
 
-            accountService.updateAccount(receiver);
-            accountService.updateAccount(sender);
+            accountService.updateBalance(receiver.getNumber(), receiver.getBalance());
+            accountService.updateBalance(sender.getNumber(), sender.getBalance());
+
+            Transaction transaction = new Transaction(tr.value(), LocalDateTime.now(), sender, receiver);
+
+            transactionRepository.save(transaction);
         }
     }
 
