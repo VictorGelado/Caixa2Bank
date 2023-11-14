@@ -1,10 +1,10 @@
 package com.ifgoiano.caixa2bank.services.account;
 
-import com.ifgoiano.caixa2bank.email.EmailCreateUserService;
-import com.ifgoiano.caixa2bank.email.EmailService;
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.DepositDTO;
 import com.ifgoiano.caixa2bank.repository.AccountRepository;
+import com.ifgoiano.caixa2bank.services.email.EmailCreateUserService;
+import com.ifgoiano.caixa2bank.services.email.EmailService;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;

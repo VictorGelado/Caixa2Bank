@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,12 +73,20 @@ public class TransactionService {
             if (account.getUser().getCpf().equals(t.getSender().getUser().getCpf())) sender = "Você";
             else if (account.getUser().getCpf().equals(t.getReceiver().getUser().getCpf())) receiver = "Você";
 
+            DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            String hour = t.getTime().format(hourFormatter);
+            String date = t.getTime().format(dateFormatter);
+
+            String dateTime = date + " às " + hour;
+
             ListTransactionDTO transaction = new ListTransactionDTO(
                 t.getId(),
                 sender,
                 t.getValue(),
                 receiver,
-                t.getTime()
+                dateTime
             );
 
             transactions.add(transaction);

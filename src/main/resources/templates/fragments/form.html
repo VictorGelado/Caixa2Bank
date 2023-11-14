@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -23,30 +23,24 @@
     <fieldset> <!-- Senha -->
         <label for="password">Senha</label>
         <div>
-            <input type="password" placeholder="123456" id="password" name="password" required>
-            <i id="view-password">aaa</i><!-- colocar olhinho -->
+            <input type="password" placeholder="123456" class="password" id="password" name="password" required>
+            <i class="view-password">aaa</i><!-- colocar olhinho -->
         </div>
     </fieldset>
 
     <fieldset> <!-- cpf -->
         <label for="cpf">CPF: </label>
-        <div>
-            <input type="text" placeholder="123456" id="cpf" name="cpf" required>
-        </div>
+        <input type="text" placeholder="123456" id="cpf" name="cpf" required>
     </fieldset>
 
     <fieldset> <!-- email -->
         <label for="email">Email: </label>
-        <div>
-            <input type="email" placeholder="123456" id="email" name="email" required>
-        </div>
+        <input type="email" placeholder="123456" id="email" name="email" required>
     </fieldset>
 
     <fieldset> <!-- telefone -->
         <label for="phone">Telefone: </label>
-        <div>
-            <input type="tel" placeholder="123456" id="phone" name="phone" required>
-        </div>
+        <input type="tel" placeholder="123456" id="phone" name="phone" required>
     </fieldset>
 
     <button type="submit" class="btn btn-primary">Registrar</button>

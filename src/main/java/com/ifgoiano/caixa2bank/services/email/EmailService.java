@@ -1,4 +1,4 @@
-package com.ifgoiano.caixa2bank.email;
+package com.ifgoiano.caixa2bank.services.email;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import jakarta.mail.MessagingException;

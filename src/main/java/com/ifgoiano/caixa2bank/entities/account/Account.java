@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -63,13 +62,8 @@ public class Account {
         this.setBalance(BigDecimal.valueOf(0));
     }
 
-    public List<String> getKeys() {
-        ArrayList<String> keys = new ArrayList<>();
-
-        if (this.getPixCpf() != null) keys.add(this.getPixCpf());
-        if (this.getPixRandomKey() != null) keys.add(this.getPixRandomKey());
-        if (this.getPixEmail() != null) keys.add(this.getPixEmail());
-        if (this.getPixPhone() != null) keys.add(this.getPixPhone());
+    public KeysDTO getKeys() {
+        KeysDTO keys = new KeysDTO(this.getPixCpf(), this.getPixRandomKey(), this.getPixEmail(), this.getPixPhone());
 
         return keys;
     }

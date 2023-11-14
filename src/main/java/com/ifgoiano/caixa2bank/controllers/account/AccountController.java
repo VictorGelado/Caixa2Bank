@@ -1,6 +1,7 @@
 package com.ifgoiano.caixa2bank.controllers.account;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
+import com.ifgoiano.caixa2bank.entities.account.KeysDTO;
 import com.ifgoiano.caixa2bank.entities.account.KeysExistisDTO;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.services.account.KeysService;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
 
 @Controller
 @RequestMapping("/account")
@@ -29,7 +29,7 @@ public class AccountController {
     public ModelAndView getPagePix() {
         ModelAndView view = new ModelAndView("area-pix");
 
-        List<String> keys = keysService.getKeysAccount();
+        KeysDTO keys = keysService.getKeysAccount();
         view.addObject("keys", keys);
 
         KeysExistisDTO registeredKeys = keysService.checkRegisteredKeys();
@@ -44,7 +44,7 @@ public class AccountController {
 
         accountService.saveKey(key);
 
-        List<String> keys = keysService.getKeysAccount();
+        KeysDTO keys = keysService.getKeysAccount();
         view.addObject("keys", keys);
 
         KeysExistisDTO registeredKeys = keysService.checkRegisteredKeys();

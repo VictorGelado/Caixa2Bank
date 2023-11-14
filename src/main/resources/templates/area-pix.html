@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -11,36 +11,58 @@
     <title>Login IF Bank</title>
 </head>
 <body>
+    <main>
+        <h1>Suas chaves pix</h1>
 
-    <div>
-        <span th:text="${keys.size()}">Chaves:</span><br><br><br>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>CPF</th>
+                        <th>Chave aleatória</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p th:if="!${checkKeys.cpf()}" th:text="${keys.cpf()}"></p>
 
-        <form th:if="${keys.size() < 0}"  method="get">
+                            <a th:if="${checkKeys.cpf()}" th:href="@{/account/register-key/cpf}">
+                                <button>Registrar CPF</button>
+                            </a>
+                        </td>
 
-        </form>
+                        <td>
+                            <p th:if="!${checkKeys.random()}" th:text="${keys.random()}"></p>
 
-        <a th:href="@{/account/register-key/cpf}" th:if="${checkKeys.cpf()}">Registrar CPF</a><br><br>
-        <a th:href="@{/account/register-key/random}" th:if="${checkKeys.random()}">Registrar Random</a><br><br>
-        <a th:href="@{/account/register-key/email}" th:if="${checkKeys.email()}">Registrar Email</a><br><br>
-        <a th:href="@{/account/register-key/phone}" th:if="${checkKeys.phone()}">Registrar phone</a><br><br>
+                            <a th:if="${checkKeys.random()}" th:href="@{/account/register-key/random}">
+                                <button>Registrar Random</button>
+                            </a>
+                        </td>
 
-        <table th:if="${keys.size() > 0}">
-            <thead>
-                <tr>
-                    <th th:if="${!checkKeys.cpf()}">CPF</th>
-                    <th th:if="${!checkKeys.random()}">Chave aleatória</th>
-                    <th th:if="${!checkKeys.email()}">Email</th>
-                    <th th:if="${!checkKeys.phone()}">Telefone</th>
-                </tr>
-            </thead>
+                        <td>
+                            <p th:if="!${checkKeys.email()}" th:text="${keys.email()}"></p>
 
-            <tbody>
-                <tr>
-                    <td th:each="key: ${keys}" th:text="${key}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                            <a th:if="${checkKeys.email()}" th:href="@{/account/register-key/email}">
+                                <button>Registrar Email</button>
+                            </a>
+                        </td>
 
+                        <td>
+                            <p th:if="!${checkKeys.phone()}" th:text="${keys.phone()}"></p>
+
+                            <a th:if="${checkKeys.phone()}" th:href="@{/account/register-key/phone}">
+                                <button>Registrar phone</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
 </body>
 </html>

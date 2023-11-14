@@ -74,24 +74,30 @@ public class PdfGenerator {
 
         cell.setPhrase(new Phrase("ID", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Receiver", font));
+        cell.setPhrase(new Phrase("Enviado por", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Sender", font));
+        cell.setPhrase(new Phrase("Recebido por", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Valor", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Time", font));
+        cell.setPhrase(new Phrase("Data e hora", font));
         table.addCell(cell);
 
         Font fontCell = FontFactory.getFont(FontFactory.TIMES_ROMAN);
         fontCell.setSize(10);
 
         for (ListTransactionDTO transaction : transactions) {
+            /*DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            String hour = transaction.time().format(hourFormatter);
+            String date = transaction.time().format(dateFormatter);*/
+
             table.addCell(new PdfPCell(new Phrase(String.valueOf(transaction.id()), fontCell)));
-            table.addCell(new PdfPCell(new Phrase(transaction.receiver(), fontCell)));
             table.addCell(new PdfPCell(new Phrase(transaction.sender(), fontCell)));
+            table.addCell(new PdfPCell(new Phrase(transaction.receiver(), fontCell)));
             table.addCell(new PdfPCell(new Phrase(String.valueOf(transaction.value()), fontCell)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(transaction.time()), fontCell)));
+            table.addCell(new PdfPCell(new Phrase(transaction.time(), fontCell)));
         }
 
         document.add(table);

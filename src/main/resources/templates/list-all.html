@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -11,36 +11,59 @@
     <title>Login IF Bank</title>
 </head>
 <body>
-    <h1>Listar tudo</h1>
+    <main>
+        <table th:if="${allUsers.size() > 0}">
+            <h1>Listar todos os usuários</h1>
 
-    <table th:if="${allUsers.size() > 0}">
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>CPF</th>
-            <th>Número da conta</th>
-            <th>Saldo</th>
-            <th>Email</th>
-        </tr>
-        </thead>
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>CPF</th>
+                <th>Número da conta</th>
+                <th>Saldo</th>
+                <th>Email</th>
+            </tr>
+            </thead>
 
-        <tbody>
-        <tr th:each="user: ${allUsers}">
-            <td th:text="${user.getUser().getUsername()}"></td>
-            <td th:text="${user.getUser().getCpf()}"></td>
-            <td th:text="${user.getNumber()}"></td>
-            <td th:text="${user.getBalance()}"></td>
-            <td th:text="${user.getUser().getEmail()}"></td>
-            <td><a th:href="@{/admin/delete/{id}(id=${user.getNumber()})}"><button>Excluir user</button></a></td>
-        </tr>
-        </tbody>
-    </table>
+            <tbody>
+            <tr th:each="user: ${allUsers}">
+                <td th:text="${user.getUser().getUsername()}"></td>
+                <td th:text="${user.getUser().getCpf()}"></td>
+                <td th:text="${user.getNumber()}"></td>
+                <td th:text="${user.getBalance()}"></td>
+                <td th:text="${user.getUser().getEmail()}"></td>
+                <td><a th:href="@{/admin/delete/{id}(id=${user.getNumber()})}"><button>Excluir user</button></a></td>
+            </tr>
+            </tbody>
+        </table>
 
-    <form th:action="@{/admin/deposit}" method="post">
-        <input type="text" name="login" required>
-        <input type="number" name="value" required>
+        <button id="view-deposit-form">Depositar</button>
 
-        <button type="submit">Depositar</button>
-    </form>
+        <form th:action="@{/admin/deposit}" method="post" id="deposit-form" style="display: none">
+            <i id="close">X</i>
+
+            <label>Número da conta ou chave pix para depósito</label>
+            <input type="text" name="login" required>
+
+            <label>Valor do depósito</label>
+            <input type="number" name="value" required>
+
+            <button type="submit">Depositar</button>
+        </form>
+    </main>
+
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
+    <script>
+        $('#view-deposit-form').click(() => {
+            $('#deposit-form').attr('style', 'display: unset');
+            $('#view-deposit-form').attr('style', 'display: none');
+        });
+
+        $('#close').click(() => {
+            $('#deposit-form').attr('style', 'display: none');
+            $("#deposit-form").find('input').val('');
+            $('#view-deposit-form').attr('style', 'display: unset');
+        });
+    </script>
 </body>
 </html>
