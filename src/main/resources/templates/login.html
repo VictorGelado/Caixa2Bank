@@ -12,16 +12,20 @@
 </head>
 <body>
     <main>
-   		<article>
-   			<h1>Caixa 2 Bank: Seu Banco para o Futuro</h1>
-   			
-   			<p>Bem-vindo ao IF Bank, o banco que se compromete a simplificar e enriquecer sua vida financeira com inovação, segurança e compromisso com a comunidade. Junte-se a nós para alcançar seus objetivos financeiros de maneira inteligente e eficiente. Seu sucesso é nossa prioridade. Bem-vindo ao IF Bank! </p>
-   		</article>
-   		
    		<form th:action="@{/user/login}" method="post">
-			<div><p th:text="${error}"></p></div><!-- error -->
+			<div class="text-center mb-4">
+				<h1 class="h3 mb-3 font-weight-normal">Caixa 2 Bank</h1>
 
-   			<h2>Sign In</h2>
+				<p class="font-weight-lighter">Seja bem-vindo.</p>
+				<p class="text-muted">Realize seu login para continuar</p>
+				<div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+					 role="alert">
+					<h4 th:text="${title}" class="alert-heading"></h4>
+					<p th:text="${text}"></p>
+					<hr>
+					<p class="mb-0"><small th:text="${subtext}"></small></p>
+				</div>
+			</div>
    			
    			<fieldset>
    				<label for="account">Conta</label>

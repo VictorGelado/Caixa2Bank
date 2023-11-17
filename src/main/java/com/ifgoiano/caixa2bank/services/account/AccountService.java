@@ -7,6 +7,8 @@ import com.ifgoiano.caixa2bank.services.email.EmailCreateUserService;
 import com.ifgoiano.caixa2bank.services.email.EmailService;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,11 +53,11 @@ public class AccountService {
 			accountDB.getUser().setEmail(account.getUser().getEmail());
 			accountDB.getUser().setPhone(account.getUser().getPhone());
 
-            if (!accountDB.getPixCpf().equals(account.getPixCpf())) accountDB.setPixCpf(account.getPixCpf());
+            if (account.getPixCpf() != null) accountDB.setPixCpf(account.getPixCpf());
 
-			if (!accountDB.getPixEmail().equals(account.getPixEmail())) accountDB.setPixEmail(account.getPixEmail());
+			if (account.getPixEmail() != null) accountDB.setPixEmail(account.getPixEmail());
 
-			if (!accountDB.getPixPhone().equals(account.getPixPhone())) accountDB.setPixPhone(account.getPixPhone());
+			if (account.getPixPhone() != null) accountDB.setPixPhone(account.getPixPhone());
 
 			repository.saveAndFlush(accountDB);
 
@@ -66,13 +68,18 @@ public class AccountService {
 		repository.save(account);
 	}
 	
-	public void saveAccount(Account account) {
+	public void saveAccount(Account account, HttpServletRequest request) {
 		String password = passwordEncoder().encode(account.getPassword());
 		String passwordTransaction = passwordEncoder().encode(account.getPasswordTransaction());
 
 		Account nAccount = new Account(password, passwordTransaction, account.getUser());
 
-		repository.save(nAccount);
+		try {
+			repository.save(nAccount);
+		} catch (Exception e) {
+			request.setAttribute("account", account);
+			request.getRequestDispatcher("/user/error-register");
+		}
 
 		emailToUserService.sendEmailCreatedAccount(account.getUser().getCpf());
 	}
@@ -164,24 +171,17 @@ public class AccountService {
 	public void updateBalance(int number, BigDecimal balance) {
 		repository.updateBalance(number, balance);
 	}
+
+	public Account findByCpf(String cpf) {
+		return repository.findByCpf(cpf);
+	}
+
+	public Account findByEmail(String email) {
+		return repository.findByEmail(email);
+	}
+
+	public Account findByPhone(String phone) {
+		return repository.findByPhone(phone);
+	}
 }
 
-
-/*
-*
-* if (key.equals("cpf")) {
-			if (repository.findByPix(account.getUser().getCpf()) == null) account.setPixCpf(account.getUser().getCpf());
-		} else if (key.equals("random")) {
-			UUID uuid;
-
-			do {
-				uuid = UUID.randomUUID();
-			} while (repository.findByPix(uuid.toString()) != null); // Verify exists random key in database
-
-			account.setPixRandomKey(uuid.toString());
-		} else if (key.equals("email")) {
-			if (repository.findByPix(account.getUser().getEmail()) == null) account.setPixEmail(account.getUser().getEmail());
-		} else if (key.equals("phone")) {
-			if (repository.findByPix(account.getUser().getPhone()) == null) account.setPixPhone(account.getUser().getPhone());
-		}
-* */

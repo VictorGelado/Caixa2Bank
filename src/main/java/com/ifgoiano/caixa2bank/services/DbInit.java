@@ -30,9 +30,7 @@ public class DbInit {
         authorities.add(authorityAdmin);
         authorities.add(authorityUser);
 
-       // if (authorityService.findById(1L).getName() == null && authorityService.findById(2L).getName() == null) {
-            authorityService.saveAllAuthority(authorities);
-       // }
+        authorityService.saveAllAuthority(authorities);
     }
 
     @PostConstruct
@@ -40,11 +38,10 @@ public class DbInit {
         UserAdminDTO newUser = new UserAdminDTO("admin", "admin", "00000000011",
                 "admin@gmail.com", "(62)900000000"
         );
+        User user = new User(newUser);
 
-        if (userService.findByLogin(newUser.cpf()) == null) {
-            User user = new User(newUser);
 
             userService.saveAdmin(user);
-        }
+
     }
 }

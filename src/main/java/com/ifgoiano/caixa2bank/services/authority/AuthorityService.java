@@ -14,7 +14,7 @@ public class AuthorityService {
     private AuthorityRepository repository;
 
     public Authority findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElse(null);
     }
 
     public Authority saveAuthority(Authority authority) {

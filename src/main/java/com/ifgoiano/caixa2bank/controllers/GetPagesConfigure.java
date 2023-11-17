@@ -21,11 +21,6 @@ public class GetPagesConfigure implements WebMvcConfigurer {
         return "login";
     }
 
-    @GetMapping("/error")
-    public String getErrorPage() {
-        return "error";
-    }
-
     @GetMapping({"/", "/home"})
     public String getHomePage() {
         return "index";

@@ -25,7 +25,7 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasAuthority("admin")
 
 				.requestMatchers("/user/register").permitAll()
-				.requestMatchers("/user/login").permitAll()
+				.requestMatchers("/user/login", "/user/login-error").permitAll()
 				.requestMatchers("/", "/home").permitAll()
 					.requestMatchers("/user/update/*").hasAuthority("user")
 					.requestMatchers("/account/email-forgot-password").permitAll()
@@ -38,7 +38,7 @@ public class SecurityConfig {
 				.loginPage("/user/login")
 				.loginProcessingUrl("/user/login")
 				.defaultSuccessUrl("/user/verify-role-user")
-				.failureUrl("/error")
+				.failureUrl("/user/login-error")
 				.permitAll()
 			)
 			.logout(logout -> logout

@@ -31,16 +31,16 @@ public class Account {
     @Column(name="balance", nullable=false)
     private BigDecimal balance;
 
-    @Column(name="pix-random-key", nullable=true)
+    @Column(name="pix-random-key")
     private String pixRandomKey;
 
-    @Column(name="pix-phone", nullable=true)
+    @Column(name="pix-phone")
     private String pixPhone;
 
-    @Column(name="pix-email", nullable=true)
+    @Column(name="pix-email")
     private String pixEmail;
 
-    @Column(name="pix-cpf", nullable=true)
+    @Column(name="pix-cpf")
     private String pixCpf;
 
     @Column(name="password-transaction", nullable = false)
