@@ -7,10 +7,12 @@ import com.ifgoiano.caixa2bank.entities.user.User;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.services.authority.AuthorityService;
 import com.ifgoiano.caixa2bank.services.user.UserDataService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -47,7 +49,7 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(NewAccountDTO newAccountDTO, RedirectAttributes attr, HttpServletRequest request) {
+	public String registerUser(NewAccountDTO newAccountDTO, RedirectAttributes attr) {
 		User user = new User(newAccountDTO);
 
 		List<Authority> authorities = new ArrayList<Authority>();
@@ -60,36 +62,22 @@ public class UserController {
 
 		Account account = new Account(newAccountDTO.password(), newAccountDTO.passwordTransaction(), user);
 
-		accountService.saveAccount(account, request);
+		try {
+			accountService.saveAccount(account);
+		} catch (DataIntegrityViolationException ex) {
+			attr.addFlashAttribute("alert", "error");
+			attr.addFlashAttribute("title", "Erro ao criar conta");
+			attr.addFlashAttribute("text", ex.getMessage());
+			attr.addFlashAttribute("subtext", "Entre em contato com o suporte para saber mais.");
+
+			attr.addFlashAttribute("account", account);
+			return "redirect:/user/register";
+		}
 
 		attr.addFlashAttribute("alert", "success");
 		attr.addFlashAttribute("title", "Conta criada com sucesso");
 		attr.addFlashAttribute("text", "Número da conta enviado para o email cadastrado.");
 		attr.addFlashAttribute("subtext", "Obrigado por escolher esse banco nada confiável.");
-
-		return "redirect:/user/login";
-	}
-
-	@GetMapping("/error-register")
-	public String getErrorRegister(RedirectAttributes attr, @RequestParam("account") Account account) {
-		System.out.println("aaaa");
-		String title = "Erro ao criar conta";
-		String text = "Tente novamente com os seus dados reais.";
-		String subtext = "Entre em contato com o suporte para saber mais.";
-
-		if (accountService.findByCpf(account.getUser().getCpf()) != null) {
-			text = "CPF já cadastrado.";
-		} else if (accountService.findByEmail(account.getUser().getEmail()) != null) {
-			text = "Email já cadastrado.";
-		} else if (accountService.findByPhone(account.getUser().getPhone()) != null) {
-			text = "Número de telefone já cadastrado.";
-		}
-
-
-		attr.addFlashAttribute("alert", "error");
-		attr.addFlashAttribute("title", title);
-		attr.addFlashAttribute("text", text);
-		attr.addFlashAttribute("subtext", subtext);
 
 		return "redirect:/user/login";
 	}

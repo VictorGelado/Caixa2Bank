@@ -10,6 +10,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -68,18 +69,23 @@ public class AccountService {
 		repository.save(account);
 	}
 	
-	public void saveAccount(Account account, HttpServletRequest request) {
+	public void saveAccount(Account account) {
 		String password = passwordEncoder().encode(account.getPassword());
 		String passwordTransaction = passwordEncoder().encode(account.getPasswordTransaction());
 
 		Account nAccount = new Account(password, passwordTransaction, account.getUser());
 
-		try {
-			repository.save(nAccount);
-		} catch (Exception e) {
-			request.setAttribute("account", account);
-			request.getRequestDispatcher("/user/error-register");
+		System.out.println(account.getUser().getCpf());
+
+		if (repository.findByCpf(account.getUser().getCpf()) != null) {
+			throw new DataIntegrityViolationException("CPF já cadastrado.");
+		} else if (repository.findByEmail(account.getUser().getEmail()) != null) {
+			throw new DataIntegrityViolationException("Email já cadastrado.");
+		} else if (repository.findByPhone(account.getUser().getPhone()) != null) {
+			throw new DataIntegrityViolationException("Número de telefone já cadastrado.");
 		}
+
+		repository.save(nAccount);
 
 		emailToUserService.sendEmailCreatedAccount(account.getUser().getCpf());
 	}

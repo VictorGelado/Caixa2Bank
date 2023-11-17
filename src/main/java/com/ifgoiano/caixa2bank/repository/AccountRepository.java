@@ -13,16 +13,16 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByNumber(int account);
 
     @Query("select u from Account u where u.user.cpf like :cpf")
-    Account findByCpf(String cpf);
+    Account findByCpf(@Param("cpf") String cpf);
 
     @Query("select u from Account u where u.number = :number")
     Account findByNumberAccount(int number);
 
     @Query("select u from Account u where u.user.email like :email")
-    Account findByEmail(String email);
+    Account findByEmail(@Param("email") String email);
 
     @Query("select u from Account u where u.user.phone like :phone")
-    Account findByPhone(String phone);
+    Account findByPhone(@Param("phone") String phone);
 
     @Query("select u from Account u where u.pixRandomKey like :key " +
             "OR u.pixCpf like :key OR u.pixEmail like :key OR u.pixPhone like :key")

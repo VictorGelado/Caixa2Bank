@@ -11,12 +11,22 @@
 <body>
 
 	<main>
-		<h1>Registrar usuário</h1>
+		<div class="text-center mb-4">
+			<h1 class="h3 mb-3 font-weight-normal">Criar conta</h1>
+
+			<div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+				 role="alert">
+				<h4 th:text="${title}" class="alert-heading"></h4>
+				<p th:text="${text}"></p>
+				<hr>
+				<p class="mb-0"><small th:text="${subtext}"></small></p>
+			</div>
+		</div>
 
 		<form th:action="@{/user/register}" method="post">
 			<fieldset>
 				<label for="username">Nome: </label>
-				<input type="text" placeholder="123456" id="username" name="username" required>
+				<input type="text" placeholder="123456" id="username" name="username" required th:value="${account} != null? ${account.getUser().getUsername()}: ''">
 			</fieldset>
 
 			<fieldset>
@@ -37,17 +47,17 @@
 
 			<fieldset> <!-- cpf -->
 				<label for="cpf">CPF: </label>
-				<input type="text" placeholder="123456" id="cpf" name="cpf" required>
+				<input type="text" placeholder="123456" id="cpf" name="cpf" required th:value="${account} != null and !${text.contains('CPF')}? ${account.getUser().getCpf()}: ''">
 			</fieldset>
 
 			<fieldset> <!-- email -->
 				<label for="email">Email: </label>
-				<input type="email" placeholder="123456" id="email" name="email" required>
+				<input type="email" placeholder="123456" id="email" name="email" required th:value="${account} != null and !${text.contains('Email')}? ${account.getUser().getEmail()}: ''">
 			</fieldset>
 
 			<fieldset> <!-- telefone -->
 				<label for="phone">Telefone: </label>
-				<input type="tel" placeholder="123456" id="phone" name="phone" required>
+				<input type="tel" placeholder="123456" id="phone" name="phone" required th:value="${account} != null and !${text.contains('telefone')}? ${account.getUser().getPhone()}: ''">
 			</fieldset>
 
 			<button type="submit" class="btn btn-primary">Registrar</button>
