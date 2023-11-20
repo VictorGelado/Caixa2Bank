@@ -12,9 +12,19 @@
 </head>
 <body>
     <main>
-        <h1>Suas chaves pix</h1>
-
         <div>
+            <div class="text-center mb-4">
+                <h1>Suas chaves pix</h1>
+
+                <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+                     role="alert">
+                    <h4 th:text="${title}" class="alert-heading"></h4>
+                    <p th:text="${text}"></p>
+                    <hr>
+                    <p class="mb-0"><small th:text="${subtext}"></small></p>
+                </div>
+            </div>
+
             <table>
                 <thead>
                     <tr>
@@ -60,6 +70,8 @@
                     </tr>
                 </tbody>
             </table>
+
+            <a th:href="@{/user/dashboard}"><button>Voltar</button></a>
         </div>
     </main>
 

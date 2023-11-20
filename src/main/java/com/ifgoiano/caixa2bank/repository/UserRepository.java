@@ -17,4 +17,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
 	List<User> findAll();
 
+	@Query("select u from User u where u.phone like :login OR " +
+			"u.cpf like :login OR " +
+			"u.email like :login")
+	User findByAdmin(String login);
 }

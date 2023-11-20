@@ -6,8 +6,10 @@ import com.ifgoiano.caixa2bank.entities.user.User;
 import com.ifgoiano.caixa2bank.repository.AuthorityRepository;
 import com.ifgoiano.caixa2bank.repository.UserRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
+import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import com.ifgoiano.caixa2bank.websecurity.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +30,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private ReturnAccountByLogin returnAccountByLogin;
 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -65,6 +70,14 @@ public class UserService implements UserDetailsService {
     }
 
     public void saveAdmin(User user) {
+        if (returnAccountByLogin.findByAdmin(user.getPhone()) != null) {
+            throw new DataIntegrityViolationException("Telefone já cadastrado.");
+        } else if (returnAccountByLogin.findByAdmin(user.getCpf()) != null) {
+            throw new DataIntegrityViolationException("CPF já cadastrado.");
+        } else if (returnAccountByLogin.findByAdmin(user.getEmail()) != null) {
+            throw new DataIntegrityViolationException("Email já cadastrado.");
+        }
+
         List<Authority> authorities = new ArrayList<Authority>();
 
         Authority authority = authorityRepository.findById(1L).get();
@@ -72,8 +85,6 @@ public class UserService implements UserDetailsService {
         authorities.add(authority);
 
         user.setAuthorities(authorities);
-
-        System.out.println(user.getAdminPassword());
 
         user.setAdminPassword(passwordEncoder().encode(user.getAdminPassword()));
 

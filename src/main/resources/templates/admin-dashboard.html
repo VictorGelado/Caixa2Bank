@@ -11,7 +11,17 @@
     <title>Login IF Bank</title>
 </head>
 <body>
-<h1>Bem vindo admin</h1>
+<div class="text-center mb-4">
+    <h1 class="h3 mb-3 font-weight-normal">Bem vindo admin</h1>
+
+    <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+         role="alert">
+        <h4 th:text="${title}" class="alert-heading"></h4>
+        <p th:text="${text}"></p>
+        <hr>
+        <p class="mb-0"><small th:text="${subtext}"></small></p>
+    </div>
+</div>
 
 <button id="new-admin">Cadastrar novo admin</button>
 

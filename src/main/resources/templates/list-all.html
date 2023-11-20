@@ -12,9 +12,19 @@
 </head>
 <body>
     <main>
-        <table th:if="${allUsers.size() > 0}">
-            <h1>Listar todos os usuários</h1>
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Listar todos os usuários</h1>
 
+            <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+                 role="alert">
+                <h4 th:text="${title}" class="alert-heading"></h4>
+                <p th:text="${text}"></p>
+                <hr>
+                <p class="mb-0"><small th:text="${subtext}"></small></p>
+            </div>
+        </div>
+
+        <table th:if="${allUsers.size() > 0}">
             <thead>
             <tr>
                 <th>Username</th>
@@ -50,6 +60,8 @@
 
             <button type="submit">Depositar</button>
         </form>
+
+        <a th:href="@{/admin/dashboard}"><button>Voltar</button></a>
     </main>
 
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>

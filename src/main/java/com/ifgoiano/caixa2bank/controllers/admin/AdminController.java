@@ -8,8 +8,10 @@ import com.ifgoiano.caixa2bank.services.account.AccountService;
 import com.ifgoiano.caixa2bank.services.user.UserDataService;
 import com.ifgoiano.caixa2bank.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,23 +50,51 @@ public class AdminController {
     public String getDashboardPage(RedirectAttributes attr) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        attr.addFlashAttribute("userData", principal.getUsername());
+        //attr.addFlashAttribute("user", userService.findByLogin(principal.getUsername()));
 
         return "admin-dashboard";
     }
 
     @PostMapping("/register-admin")
-    public String getRegister(UserAdminDTO newUser) {
+    public String getRegister(UserAdminDTO newUser, RedirectAttributes attr) {
         User user = new User(newUser);
 
-        userService.saveAdmin(user);
+        try {
+            userService.saveAdmin(user);
+        } catch (DataIntegrityViolationException d) {
+            attr.addFlashAttribute("alert", "error");
+            attr.addFlashAttribute("title", "Criação de conta admin não concluída.");
+            attr.addFlashAttribute("text", d.getMessage());
+            attr.addFlashAttribute("subtext", "Tente novamente com dados não cadastrados.");
+
+            return "redirect:/admin/dashboard";
+        }
+
+        attr.addFlashAttribute("alert", "success");
+        attr.addFlashAttribute("title", "Conta admin criada com sucesso");
+        attr.addFlashAttribute("text", "Use o email para fazer o login na mesma.");
+        attr.addFlashAttribute("subtext", "Essa conta tem funcionalidades exclusivas.");
 
         return "redirect:/admin/dashboard";
     }
 
     @PostMapping("/deposit")
-    public String deposit(DepositDTO depositDTO) {
-        accountService.deposit(depositDTO);
+    public String deposit(DepositDTO depositDTO, RedirectAttributes attr) {
+        try {
+            accountService.deposit(depositDTO);
+        } catch (UsernameNotFoundException u) {
+            attr.addFlashAttribute("alert", "error");
+            attr.addFlashAttribute("title", "Depósito.");
+            attr.addFlashAttribute("text", u.getMessage() + " Login: " + depositDTO.login());
+            attr.addFlashAttribute("subtext", "O depósito não foi realizado.");
+
+            return "redirect:/admin/list-all";
+        }
+
+        attr.addFlashAttribute("alert", "success");
+        attr.addFlashAttribute("title", "Depósito.");
+        attr.addFlashAttribute("text", "Depósito realizado com sucesso no login: " + depositDTO.login());
+        attr.addFlashAttribute("subtext", "A conta já está com o saldo a mais.");
 
         return "redirect:/admin/list-all";
     }
@@ -72,6 +102,11 @@ public class AdminController {
     @GetMapping("/delete/{id}")
     public String deleteUser(RedirectAttributes attr, @PathVariable int id) {
         accountService.deleteAccount(id);
+
+        attr.addFlashAttribute("alert", "success");
+        attr.addFlashAttribute("title", "Exclusão de conta.");
+        attr.addFlashAttribute("text", "Conta com id: " + id + ", foi excluída com sucesso.");
+        attr.addFlashAttribute("subtext", "A conta não poderá ser acessada novamente.");
 
         return "redirect:/admin/list-all";
     }

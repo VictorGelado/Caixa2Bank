@@ -109,23 +109,29 @@ public class AccountService {
 
         switch (key) {
             case "cpf" -> {
-                if (repository.findByPix(account.getUser().getCpf()) == null)
-                    account.setPixCpf(account.getUser().getCpf());
+                if (repository.findByPix(account.getUser().getCpf()) == null) {
+					account.setPixCpf(account.getUser().getCpf());
+				} else throw new DataIntegrityViolationException("Chave de CPF já cadastrada.");
             }
             case "random" -> {
                 UUID uuid;
+
+				if (account.getPixRandomKey() != null) throw new DataIntegrityViolationException("Chave aleatória já cadastrada.");
+
                 do {
                     uuid = UUID.randomUUID();
                 } while (repository.findByPix(uuid.toString()) != null); // Verify exists random key in database
                 account.setPixRandomKey(uuid.toString());
             }
             case "email" -> {
-                if (repository.findByPix(account.getUser().getEmail()) == null)
-                    account.setPixEmail(account.getUser().getEmail());
+                if (repository.findByPix(account.getUser().getEmail()) == null) {
+					account.setPixEmail(account.getUser().getEmail());
+				} else throw new DataIntegrityViolationException("Chave de Email já cadastrada.");
             }
             case "phone" -> {
-                if (repository.findByPix(account.getUser().getPhone()) == null)
-                    account.setPixPhone(account.getUser().getPhone());
+                if (repository.findByPix(account.getUser().getPhone()) == null) {
+					account.setPixPhone(account.getUser().getPhone());
+				} else throw new DataIntegrityViolationException("Chave de telefone já cadastrada.");
             }
         }
 
@@ -143,7 +149,9 @@ public class AccountService {
 	public void deposit(DepositDTO depositDTO) {
 		Account account = returnAccountByLogin.findByLogin(depositDTO.login());
 
-		if (account == null) throw new UsernameNotFoundException("User not exists");
+		if (account == null) account = repository.findByPix(depositDTO.login());
+
+		if (account == null) throw new UsernameNotFoundException("Conta inexistente.");
 
 		account.setBalance(account.getBalance().add(depositDTO.value()));
 
