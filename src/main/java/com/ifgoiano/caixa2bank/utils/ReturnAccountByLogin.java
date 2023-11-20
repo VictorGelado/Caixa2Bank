@@ -5,7 +5,6 @@ import com.ifgoiano.caixa2bank.entities.user.User;
 import com.ifgoiano.caixa2bank.repository.AccountRepository;
 import com.ifgoiano.caixa2bank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service

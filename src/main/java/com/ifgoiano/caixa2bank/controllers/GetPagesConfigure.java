@@ -12,8 +12,13 @@ public class GetPagesConfigure implements WebMvcConfigurer {
     private EmailService emailService;
 
     @GetMapping("/user/register")
-    public String getRegisterPage() {
-        return "register";
+    public String getRegisterUserPage() {
+        return "register-user";
+    }
+
+    @GetMapping("/admin/register")
+    public String getRegisterAdminPage() {
+        return "register-admin";
     }
 
     @GetMapping("/user/login")

@@ -7,8 +7,6 @@ import com.ifgoiano.caixa2bank.services.email.EmailCreateUserService;
 import com.ifgoiano.caixa2bank.services.email.EmailService;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;

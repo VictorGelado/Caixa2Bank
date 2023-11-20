@@ -8,7 +8,6 @@ import com.ifgoiano.caixa2bank.services.user.UserService;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

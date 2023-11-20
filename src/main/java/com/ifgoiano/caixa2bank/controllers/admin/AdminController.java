@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,10 +48,10 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard")
-    public String getDashboardPage(RedirectAttributes attr) {
+    public String getDashboardPage(ModelMap mM) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        //attr.addFlashAttribute("user", userService.findByLogin(principal.getUsername()));
+        mM.addAttribute("user", userService.findByLogin(principal.getUsername()));
 
         return "admin-dashboard";
     }

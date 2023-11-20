@@ -47,7 +47,7 @@
             </tbody>
         </table>
 
-        <button id="view-deposit-form">Depositar</button>
+        <button id="view-deposit-form" th:if="${allUsers.size() > 0}">Depositar</button>
 
         <form th:action="@{/admin/deposit}" method="post" id="deposit-form" style="display: none">
             <i id="close">X</i>
@@ -77,5 +77,6 @@
             $('#view-deposit-form').attr('style', 'display: unset');
         });
     </script>
+    <script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>
 </body>
 </html>

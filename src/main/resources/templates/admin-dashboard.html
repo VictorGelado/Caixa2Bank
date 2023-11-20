@@ -11,25 +11,27 @@
     <title>Login IF Bank</title>
 </head>
 <body>
-<div class="text-center mb-4">
-    <h1 class="h3 mb-3 font-weight-normal">Bem vindo admin</h1>
+<main>
+    <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">Bem vindo [[${user.username}]]</h1>
 
-    <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
-         role="alert">
-        <h4 th:text="${title}" class="alert-heading"></h4>
-        <p th:text="${text}"></p>
-        <hr>
-        <p class="mb-0"><small th:text="${subtext}"></small></p>
+        <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+             role="alert">
+            <h4 th:text="${title}" class="alert-heading"></h4>
+            <p th:text="${text}"></p>
+            <hr>
+            <p class="mb-0"><small th:text="${subtext}"></small></p>
+        </div>
     </div>
-</div>
 
-<button id="new-admin">Cadastrar novo admin</button>
+    <a th:href="@{/admin/register}"><button>Cadastrar novo admin</button></a>
 
-<div th:replace="~{/fragments/form.html :: register-admin}"></div>
+    <a th:href="@{/admin/list-all}"><button>Listar usuários</button></a>
 
-<a th:href="@{/admin/list-all}"><button>Listar usuários</button></a>
+    <a th:href="@{/admin/logout}"><button>Sair</button></a>
+</main>
 
+<script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>
 <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
-<script th:src="@{/js/admin-dashboard.js}" type="text/javascript"></script>
 </body>
 </html>
