@@ -11,71 +11,73 @@
     <title>Login IF Bank</title>
 </head>
 <body>
-    <main>
-        <div>
-            <div class="text-center mb-4">
-                <h1>Suas chaves pix</h1>
+<main>
+    <div>
+        <div class="text-center mb-4">
+            <h1>Suas chaves pix</h1>
 
-                <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
-                     role="alert">
-                    <h4 th:text="${title}" class="alert-heading"></h4>
-                    <p th:text="${text}"></p>
-                    <hr>
-                    <p class="mb-0"><small th:text="${subtext}"></small></p>
-                </div>
+            <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+                 role="alert">
+                <h4 th:text="${title}" class="alert-heading"></h4>
+                <p th:text="${text}"></p>
+                <hr>
+                <p class="mb-0"><small th:text="${subtext}"></small></p>
             </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>CPF</th>
-                        <th>Chave aleatória</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <p th:if="!${checkKeys.cpf()}" th:text="${keys.cpf()}"></p>
-
-                            <a th:if="${checkKeys.cpf()}" th:href="@{/account/register-key/cpf}">
-                                <button>Registrar CPF</button>
-                            </a>
-                        </td>
-
-                        <td>
-                            <p th:if="!${checkKeys.random()}" th:text="${keys.random()}"></p>
-
-                            <a th:if="${checkKeys.random()}" th:href="@{/account/register-key/random}">
-                                <button>Registrar Random</button>
-                            </a>
-                        </td>
-
-                        <td>
-                            <p th:if="!${checkKeys.email()}" th:text="${keys.email()}"></p>
-
-                            <a th:if="${checkKeys.email()}" th:href="@{/account/register-key/email}">
-                                <button>Registrar Email</button>
-                            </a>
-                        </td>
-
-                        <td>
-                            <p th:if="!${checkKeys.phone()}" th:text="${keys.phone()}"></p>
-
-                            <a th:if="${checkKeys.phone()}" th:href="@{/account/register-key/phone}">
-                                <button>Registrar phone</button>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <a th:href="@{/user/dashboard}"><button>Voltar</button></a>
         </div>
-    </main>
 
-    <script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>
-    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
+        <table>
+            <thead>
+            <tr>
+                <th>CPF</th>
+                <th>Chave aleatória</th>
+                <th>Email</th>
+                <th>Telefone</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <p th:if="!${checkKeys.cpf()}" th:text="${keys.cpf()}"></p>
+
+                    <a th:if="${checkKeys.cpf()}" th:href="@{/account/register-key/cpf}">
+                        <button>Registrar CPF</button>
+                    </a>
+                </td>
+
+                <td>
+                    <p th:if="!${checkKeys.random()}" th:text="${keys.random()}"></p>
+
+                    <a th:if="${checkKeys.random()}" th:href="@{/account/register-key/random}">
+                        <button>Registrar Random</button>
+                    </a>
+                </td>
+
+                <td>
+                    <p th:if="!${checkKeys.email()}" th:text="${keys.email()}"></p>
+
+                    <a th:if="${checkKeys.email()}" th:href="@{/account/register-key/email}">
+                        <button>Registrar Email</button>
+                    </a>
+                </td>
+
+                <td>
+                    <p th:if="!${checkKeys.phone()}" th:text="${keys.phone()}"></p>
+
+                    <a th:if="${checkKeys.phone()}" th:href="@{/account/register-key/phone}">
+                        <button>Registrar phone</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/user/dashboard}">
+            <button>Voltar</button>
+        </a>
+    </div>
+</main>
+
+<script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
 </body>
 </html>

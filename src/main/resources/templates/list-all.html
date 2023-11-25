@@ -11,72 +11,76 @@
     <title>Login IF Bank</title>
 </head>
 <body>
-    <main>
-        <div class="text-center mb-4">
-            <h1 class="h3 mb-3 font-weight-normal">Listar todos os usuários</h1>
+<main>
+    <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">Listar todos os usuários</h1>
 
-            <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
-                 role="alert">
-                <h4 th:text="${title}" class="alert-heading"></h4>
-                <p th:text="${text}"></p>
-                <hr>
-                <p class="mb-0"><small th:text="${subtext}"></small></p>
-            </div>
+        <div th:if="${alert != null}" th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'"
+             role="alert">
+            <h4 th:text="${title}" class="alert-heading"></h4>
+            <p th:text="${text}"></p>
+            <hr>
+            <p class="mb-0"><small th:text="${subtext}"></small></p>
         </div>
+    </div>
 
-        <table th:if="${allUsers.size() > 0}">
-            <thead>
-            <tr>
-                <th>Username</th>
-                <th>CPF</th>
-                <th>Número da conta</th>
-                <th>Saldo</th>
-                <th>Email</th>
-            </tr>
-            </thead>
+    <table th:if="${allUsers.size() > 0}">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>CPF</th>
+            <th>Número da conta</th>
+            <th>Saldo</th>
+            <th>Email</th>
+        </tr>
+        </thead>
 
-            <tbody>
-            <tr th:each="user: ${allUsers}">
-                <td th:text="${user.getUser().getUsername()}"></td>
-                <td th:text="${user.getUser().getCpf()}"></td>
-                <td th:text="${user.getNumber()}"></td>
-                <td th:text="${user.getBalance()}"></td>
-                <td th:text="${user.getUser().getEmail()}"></td>
-                <td><a th:href="@{/admin/delete/{id}(id=${user.getNumber()})}"><button>Excluir user</button></a></td>
-            </tr>
-            </tbody>
-        </table>
+        <tbody>
+        <tr th:each="user: ${allUsers}">
+            <td th:text="${user.getUser().getUsername()}"></td>
+            <td th:text="${user.getUser().getCpf()}"></td>
+            <td th:text="${user.getNumber()}"></td>
+            <td th:text="${user.getBalance()}"></td>
+            <td th:text="${user.getUser().getEmail()}"></td>
+            <td><a th:href="@{/admin/delete/{id}(id=${user.getNumber()})}">
+                <button>Excluir user</button>
+            </a></td>
+        </tr>
+        </tbody>
+    </table>
 
-        <button id="view-deposit-form" th:if="${allUsers.size() > 0}">Depositar</button>
+    <button id="view-deposit-form" th:if="${allUsers.size() > 0}">Depositar</button>
 
-        <form th:action="@{/admin/deposit}" method="post" id="deposit-form" style="display: none">
-            <i id="close">X</i>
+    <form th:action="@{/admin/deposit}" method="post" id="deposit-form" style="display: none">
+        <i id="close">X</i>
 
-            <label>Número da conta ou chave pix para depósito</label>
-            <input type="text" name="login" required>
+        <label>Número da conta ou chave pix para depósito</label>
+        <input type="text" name="login" required>
 
-            <label>Valor do depósito</label>
-            <input type="number" name="value" required>
+        <label>Valor do depósito</label>
+        <input type="number" name="value" required>
 
-            <button type="submit">Depositar</button>
-        </form>
+        <button type="submit">Depositar</button>
+    </form>
 
-        <a th:href="@{/admin/dashboard}"><button>Voltar</button></a>
-    </main>
+    <a th:href="@{/admin/dashboard}">
+        <button>Voltar</button>
+    </a>
+</main>
 
-    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
-    <script>
-        $('#view-deposit-form').click(() => {
-            $('#deposit-form').attr('style', 'display: unset');
-            $('#view-deposit-form').attr('style', 'display: none');
-        });
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js}"></script>
+<script>
+    $('#view-deposit-form').click(() => {
+        $('#deposit-form').attr('style', 'display: unset');
+        $('#view-deposit-form').attr('style', 'display: none');
+    });
 
-        $('#close').click(() => {
-            $('#deposit-form').attr('style', 'display: none');
-            $("#deposit-form").find('input').val('');
-            $('#view-deposit-form').attr('style', 'display: unset');
-        });
-    </script>
-    <script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>
+    $('#close').click(() => {
+        $('#deposit-form').attr('style', 'display: none');
+        $("#deposit-form").find('input').val('');
+        $('#view-deposit-form').attr('style', 'display: unset');
+    });
+</script>
+<script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>
 </body>
 </html>

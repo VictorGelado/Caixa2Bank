@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -24,11 +24,17 @@
         </div>
     </div>
 
-    <a th:href="@{/admin/register}"><button>Cadastrar novo admin</button></a>
+    <a th:href="@{/admin/register}">
+        <button>Cadastrar novo admin</button>
+    </a>
 
-    <a th:href="@{/admin/list-all}"><button>Listar usuários</button></a>
+    <a th:href="@{/admin/list-all}">
+        <button>Listar usuários</button>
+    </a>
 
-    <a th:href="@{/admin/logout}"><button>Sair</button></a>
+    <a th:href="@{/admin/logout}">
+        <button>Sair</button>
+    </a>
 </main>
 
 <script src="https://kit.fontawesome.com/a20fb09076.js" crossorigin="anonymous"></script>

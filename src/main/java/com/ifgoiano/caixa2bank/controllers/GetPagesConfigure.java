@@ -16,6 +16,11 @@ public class GetPagesConfigure implements WebMvcConfigurer {
         return "register-user";
     }
 
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
+
     @GetMapping("/admin/register")
     public String getRegisterAdminPage() {
         return "register-admin";

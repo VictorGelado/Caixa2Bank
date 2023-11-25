@@ -46,9 +46,9 @@ public class DbInit {
         User user = new User(newUser);
 
         if (
-            returnAccountByLogin.findByAdmin(user.getPhone()) == null &&
-            returnAccountByLogin.findByAdmin(user.getCpf()) == null &&
-            returnAccountByLogin.findByAdmin(user.getEmail()) == null
+                returnAccountByLogin.findByAdmin(user.getPhone()) == null &&
+                        returnAccountByLogin.findByAdmin(user.getCpf()) == null &&
+                        returnAccountByLogin.findByAdmin(user.getEmail()) == null
         ) {
             userService.saveAdmin(user);
         }

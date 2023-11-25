@@ -17,28 +17,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="transaction")
+@Table(name = "transaction")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id", nullable=false, length=6, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, length = 6, updatable = false)
     private Long id;
 
-    @Column(name="value", nullable = false, updatable = false)
+    @Column(name = "value", nullable = false, updatable = false)
     private BigDecimal value;
 
-    @Column(columnDefinition="TIMESTAMP with time zone", updatable = false)
+    @Column(columnDefinition = "TIMESTAMP with time zone", updatable = false)
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime time;
 
     @ManyToOne
-    @JoinColumn(name="sender_number")
+    @JoinColumn(name = "sender_number")
     @NotNull
     private Account sender;
 
     @ManyToOne
-    @JoinColumn(name="receiver_number")
+    @JoinColumn(name = "receiver_number")
     @NotNull
     private Account receiver;
 

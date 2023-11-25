@@ -35,7 +35,7 @@ public class PdfGenerator {
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
         String currentDateTime = dateFormat.format(new Date());
         String headerkey = "Content-Disposition";
-        String headervalue = "attachment; filename=Transações_"+ currentDateTime +".pdf";
+        String headervalue = "attachment; filename=Transações_" + currentDateTime + ".pdf";
         response.setHeader(headerkey, headervalue);
 
 
@@ -104,12 +104,12 @@ public class PdfGenerator {
 
         document.close();
     }
-    
+
     private List<ListTransactionDTO> getTransactions() {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Account account = accountService.findByLogin(principal.getUsername());
 
-        return  transactionService.findAllTransactions(account);
+        return transactionService.findAllTransactions(account);
     }
 }

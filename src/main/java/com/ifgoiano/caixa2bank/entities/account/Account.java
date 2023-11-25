@@ -16,43 +16,43 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="account")
+@Table(name = "account")
 public class Account {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="num_seq")
-    @SequenceGenerator(name="num_seq", sequenceName="number_seq", allocationSize=1, initialValue=100000)
-    @Column(name="number", nullable=false, length = 6, updatable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "num_seq")
+    @SequenceGenerator(name = "num_seq", sequenceName = "number_seq", allocationSize = 1, initialValue = 100000)
+    @Column(name = "number", nullable = false, length = 6, updatable = false)
     private Integer number;
 
-    @Column(name="password", nullable=false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name="balance", nullable=false)
+    @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    @Column(name="pix-random-key")
+    @Column(name = "pix-random-key")
     private String pixRandomKey;
 
-    @Column(name="pix-phone")
+    @Column(name = "pix-phone")
     private String pixPhone;
 
-    @Column(name="pix-email")
+    @Column(name = "pix-email")
     private String pixEmail;
 
-    @Column(name="pix-cpf")
+    @Column(name = "pix-cpf")
     private String pixCpf;
 
-    @Column(name="password-transaction", nullable = false)
+    @Column(name = "password-transaction", nullable = false)
     private String passwordTransaction;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     User user;
 
-    @OneToMany(mappedBy="sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Transaction> transactionsSent;
 
-    @OneToMany(mappedBy="receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Transaction> transactionsReceived;
 
     public Account(String password, String passwordTransaction, User user) {
@@ -71,10 +71,10 @@ public class Account {
     public KeysExistisDTO checkRegisteredKeys() {
 
         KeysExistisDTO registeredKeys = new KeysExistisDTO(
-            this.getPixCpf() == null,
-            this.getPixRandomKey() == null,
-            this.getPixPhone() == null,
-            this.getPixEmail() == null
+                this.getPixCpf() == null,
+                this.getPixRandomKey() == null,
+                this.getPixPhone() == null,
+                this.getPixEmail() == null
         );
 
         return registeredKeys;

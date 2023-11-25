@@ -21,34 +21,34 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-			.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/admin/**").hasAuthority("admin")
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/admin/**").hasAuthority("admin")
 
-				.requestMatchers("/user/register").permitAll()
-				.requestMatchers("/user/login", "/user/login-error").permitAll()
-				.requestMatchers("/", "/home").permitAll()
-					.requestMatchers("/user/update/*").hasAuthority("user")
-					.requestMatchers("/account/email-forgot-password").permitAll()
-					.requestMatchers("/account/forgot-password").permitAll()
-					.requestMatchers("/account/forgot-password/**").permitAll()
-				.requestMatchers("/webjars/**", "/css/**", "/images/**", "/js/**").permitAll()
-				.anyRequest().authenticated()
-			)
-			.formLogin(form -> form
-				.loginPage("/user/login")
-				.loginProcessingUrl("/user/login")
-				.defaultSuccessUrl("/user/verify-role-user")
-				.failureUrl("/user/login-error")
-				.permitAll()
-			)
-			.logout(logout -> logout
-				.logoutRequestMatcher(new AntPathRequestMatcher("/**/logout"))
-					.deleteCookies("JSESSIONID")
-				.permitAll()
-			)
-			.sessionManagement(session -> session
-				.maximumSessions(1)
-			);
+                        .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/user/login", "/user/login-error", "/error").permitAll()
+                        .requestMatchers("/", "/home").permitAll()
+                        .requestMatchers("/user/update/*").hasAuthority("user")
+                        .requestMatchers("/account/email-forgot-password").permitAll()
+                        .requestMatchers("/account/forgot-password").permitAll()
+                        .requestMatchers("/account/forgot-password/**").permitAll()
+                        .requestMatchers("/webjars/**", "/style/**", "/images/**", "/js/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/user/login")
+                        .loginProcessingUrl("/user/login")
+                        .defaultSuccessUrl("/user/verify-role-user")
+                        .failureUrl("/user/login-error")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/**/logout"))
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .maximumSessions(1)
+                );
 
 
         return http.build();

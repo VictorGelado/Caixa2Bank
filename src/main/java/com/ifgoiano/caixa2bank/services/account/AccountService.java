@@ -25,96 +25,97 @@ import java.util.UUID;
 @Service
 public class AccountService {
 
-	@Autowired
-	private AccountRepository repository;
+    @Autowired
+    private AccountRepository repository;
 
-	@Autowired
-	private ReturnAccountByLogin returnAccountByLogin;
+    @Autowired
+    private ReturnAccountByLogin returnAccountByLogin;
 
-	@Autowired
-	private EmailCreateUserService emailToUserService;
+    @Autowired
+    private EmailCreateUserService emailToUserService;
 
-	@Autowired
-	private EmailService emailService;
+    @Autowired
+    private EmailService emailService;
 
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Transactional
-	public void updateAccount(Account account) {
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @Transactional
+    public void updateAccount(Account account) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		Account accountDB = findByLogin(principal.getUsername());
+        Account accountDB = findByLogin(principal.getUsername());
 
-		if (account != accountDB) {
-			accountDB.getUser().setUsername(account.getUser().getUsername());
-			accountDB.getUser().setEmail(account.getUser().getEmail());
-			accountDB.getUser().setPhone(account.getUser().getPhone());
+        if (account != accountDB) {
+            accountDB.getUser().setUsername(account.getUser().getUsername());
+            accountDB.getUser().setEmail(account.getUser().getEmail());
+            accountDB.getUser().setPhone(account.getUser().getPhone());
 
             if (account.getPixCpf() != null) accountDB.setPixCpf(account.getPixCpf());
 
-			if (account.getPixEmail() != null) accountDB.setPixEmail(account.getPixEmail());
+            if (account.getPixEmail() != null) accountDB.setPixEmail(account.getPixEmail());
 
-			if (account.getPixPhone() != null) accountDB.setPixPhone(account.getPixPhone());
+            if (account.getPixPhone() != null) accountDB.setPixPhone(account.getPixPhone());
 
-			repository.saveAndFlush(accountDB);
+            repository.saveAndFlush(accountDB);
 
-			return;
-		}
+            return;
+        }
 
 
-		repository.save(account);
-	}
-	
-	public void saveAccount(Account account) {
-		String password = passwordEncoder().encode(account.getPassword());
-		String passwordTransaction = passwordEncoder().encode(account.getPasswordTransaction());
+        repository.save(account);
+    }
 
-		Account nAccount = new Account(password, passwordTransaction, account.getUser());
+    public void saveAccount(Account account) {
+        String password = passwordEncoder().encode(account.getPassword());
+        String passwordTransaction = passwordEncoder().encode(account.getPasswordTransaction());
 
-		System.out.println(account.getUser().getCpf());
+        Account nAccount = new Account(password, passwordTransaction, account.getUser());
 
-		if (repository.findByCpf(account.getUser().getCpf()) != null) {
-			throw new DataIntegrityViolationException("CPF já cadastrado.");
-		} else if (repository.findByEmail(account.getUser().getEmail()) != null) {
-			throw new DataIntegrityViolationException("Email já cadastrado.");
-		} else if (repository.findByPhone(account.getUser().getPhone()) != null) {
-			throw new DataIntegrityViolationException("Número de telefone já cadastrado.");
-		}
+        System.out.println(account.getUser().getCpf());
 
-		repository.save(nAccount);
+        if (repository.findByCpf(account.getUser().getCpf()) != null) {
+            throw new DataIntegrityViolationException("CPF já cadastrado.");
+        } else if (repository.findByEmail(account.getUser().getEmail()) != null) {
+            throw new DataIntegrityViolationException("Email já cadastrado.");
+        } else if (repository.findByPhone(account.getUser().getPhone()) != null) {
+            throw new DataIntegrityViolationException("Número de telefone já cadastrado.");
+        }
 
-		emailToUserService.sendEmailCreatedAccount(account.getUser().getCpf());
-	}
+        repository.save(nAccount);
 
-	public Account findByLogin(String login) {
-		Account account;
+        emailToUserService.sendEmailCreatedAccount(account.getUser().getCpf());
+    }
 
-		account = returnAccountByLogin.findByLogin(login);
+    public Account findByLogin(String login) {
+        Account account;
 
-		return account;
-	}
+        account = returnAccountByLogin.findByLogin(login);
 
-	public Account findByNumberAccount(int number) {
-		return repository.findByNumberAccount(number);
-	}
+        return account;
+    }
 
-	public void saveKey(String key) {
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public Account findByNumberAccount(int number) {
+        return repository.findByNumberAccount(number);
+    }
 
-		Account account = findByLogin(principal.getUsername());
+    public void saveKey(String key) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Account account = findByLogin(principal.getUsername());
 
         switch (key) {
             case "cpf" -> {
                 if (repository.findByPix(account.getUser().getCpf()) == null) {
-					account.setPixCpf(account.getUser().getCpf());
-				} else throw new DataIntegrityViolationException("Chave de CPF já cadastrada.");
+                    account.setPixCpf(account.getUser().getCpf());
+                } else throw new DataIntegrityViolationException("Chave de CPF já cadastrada.");
             }
             case "random" -> {
                 UUID uuid;
 
-				if (account.getPixRandomKey() != null) throw new DataIntegrityViolationException("Chave aleatória já cadastrada.");
+                if (account.getPixRandomKey() != null)
+                    throw new DataIntegrityViolationException("Chave aleatória já cadastrada.");
 
                 do {
                     uuid = UUID.randomUUID();
@@ -123,77 +124,77 @@ public class AccountService {
             }
             case "email" -> {
                 if (repository.findByPix(account.getUser().getEmail()) == null) {
-					account.setPixEmail(account.getUser().getEmail());
-				} else throw new DataIntegrityViolationException("Chave de Email já cadastrada.");
+                    account.setPixEmail(account.getUser().getEmail());
+                } else throw new DataIntegrityViolationException("Chave de Email já cadastrada.");
             }
             case "phone" -> {
                 if (repository.findByPix(account.getUser().getPhone()) == null) {
-					account.setPixPhone(account.getUser().getPhone());
-				} else throw new DataIntegrityViolationException("Chave de telefone já cadastrada.");
+                    account.setPixPhone(account.getUser().getPhone());
+                } else throw new DataIntegrityViolationException("Chave de telefone já cadastrada.");
             }
         }
 
-		repository.save(account);
-	}
+        repository.save(account);
+    }
 
-	public Account findByPix(String key) {
-		return repository.findByPix(key);
-	}
+    public Account findByPix(String key) {
+        return repository.findByPix(key);
+    }
 
-	public List<Account> findAll() {
-		return repository.findAll();
-	}
+    public List<Account> findAll() {
+        return repository.findAll();
+    }
 
-	public void deposit(DepositDTO depositDTO) {
-		Account account = returnAccountByLogin.findByLogin(depositDTO.login());
+    public void deposit(DepositDTO depositDTO) {
+        Account account = returnAccountByLogin.findByLogin(depositDTO.login());
 
-		if (account == null) account = repository.findByPix(depositDTO.login());
+        if (account == null) account = repository.findByPix(depositDTO.login());
 
-		if (account == null) throw new UsernameNotFoundException("Conta inexistente.");
+        if (account == null) throw new UsernameNotFoundException("Conta inexistente.");
 
-		account.setBalance(account.getBalance().add(depositDTO.value()));
+        account.setBalance(account.getBalance().add(depositDTO.value()));
 
-		repository.save(account);
-	}
+        repository.save(account);
+    }
 
-	public void deleteAccount(int id) {
-		repository.deleteById(id);
-	}
+    public void deleteAccount(int id) {
+        repository.deleteById(id);
+    }
 
-	@Transactional
-	public void updatePassword(Account account, boolean passwordLogin) {
-		if (passwordLogin) {
-			account.setPassword(passwordEncoder().encode(account.getPassword()));
-			repository.changePasswordByNumberAccount(account.getNumber(), account.getPassword());
-		} else {
-			account.setPasswordTransaction(passwordEncoder().encode(account.getPasswordTransaction()));
-			repository.changePasswordTransactionByNumberAccount(account.getNumber(), account.getPasswordTransaction());
-		}
-	}
+    @Transactional
+    public void updatePassword(Account account, boolean passwordLogin) {
+        if (passwordLogin) {
+            account.setPassword(passwordEncoder().encode(account.getPassword()));
+            repository.changePasswordByNumberAccount(account.getNumber(), account.getPassword());
+        } else {
+            account.setPasswordTransaction(passwordEncoder().encode(account.getPasswordTransaction()));
+            repository.changePasswordTransactionByNumberAccount(account.getNumber(), account.getPasswordTransaction());
+        }
+    }
 
-	public void sendEmailForgotPassword(String login) throws MessagingException {
-		String code = Base64.getEncoder().encodeToString(login.getBytes());
+    public void sendEmailForgotPassword(String login) throws MessagingException {
+        String code = Base64.getEncoder().encodeToString(login.getBytes());
 
-		Account account = findByLogin(login);
+        Account account = findByLogin(login);
 
-		emailService.sendEmailForgotPassword(account, code);
-	}
+        emailService.sendEmailForgotPassword(account, code);
+    }
 
-	@Transactional
-	public void updateBalance(int number, BigDecimal balance) {
-		repository.updateBalance(number, balance);
-	}
+    @Transactional
+    public void updateBalance(int number, BigDecimal balance) {
+        repository.updateBalance(number, balance);
+    }
 
-	public Account findByCpf(String cpf) {
-		return repository.findByCpf(cpf);
-	}
+    public Account findByCpf(String cpf) {
+        return repository.findByCpf(cpf);
+    }
 
-	public Account findByEmail(String email) {
-		return repository.findByEmail(email);
-	}
+    public Account findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 
-	public Account findByPhone(String phone) {
-		return repository.findByPhone(phone);
-	}
+    public Account findByPhone(String phone) {
+        return repository.findByPhone(phone);
+    }
 }
 

@@ -47,7 +47,7 @@ public class TransactionService {
             //LocalDateTime lDate = LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
 
             if (sender.getBalance().compareTo(tr.value()) >= 0 &&
-                passwordEncoder().matches(tr.passwordTransaction(), sender.getPasswordTransaction())) {
+                    passwordEncoder().matches(tr.passwordTransaction(), sender.getPasswordTransaction())) {
                 receiver.setBalance(receiver.getBalance().add(tr.value()));
                 sender.setBalance(sender.getBalance().subtract(tr.value()));
             } else throw new Exception("");
@@ -82,11 +82,11 @@ public class TransactionService {
             String dateTime = date + " às " + hour;
 
             ListTransactionDTO transaction = new ListTransactionDTO(
-                t.getId(),
-                sender,
-                t.getValue(),
-                receiver,
-                dateTime
+                    t.getId(),
+                    sender,
+                    t.getValue(),
+                    receiver,
+                    dateTime
             );
 
             transactions.add(transaction);

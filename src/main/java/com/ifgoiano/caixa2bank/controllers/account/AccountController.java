@@ -80,8 +80,8 @@ public class AccountController {
         Account account = null;
 
         if (code != null) {
-             byte[] bytesDecode = Base64.getDecoder().decode(code.getBytes(StandardCharsets.UTF_8));
-             String login = new String(bytesDecode, StandardCharsets.UTF_8);
+            byte[] bytesDecode = Base64.getDecoder().decode(code.getBytes(StandardCharsets.UTF_8));
+            String login = new String(bytesDecode, StandardCharsets.UTF_8);
 
             account = accountService.findByLogin(login);
 

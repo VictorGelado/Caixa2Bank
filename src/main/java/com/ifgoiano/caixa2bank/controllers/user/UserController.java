@@ -29,107 +29,107 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-	@Autowired
-	private AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
-	@Autowired
-	private UserDataService userDataService;
+    @Autowired
+    private UserDataService userDataService;
 
-	@Autowired
-	private AuthorityService authorityRepository;
+    @Autowired
+    private AuthorityService authorityRepository;
 
-	@GetMapping("/login-error")
-	public String getErrorPage(ModelMap mM) {
-		mM.addAttribute("alert", "error");
-		mM.addAttribute("title", "Erro na tentativa de login");
-		mM.addAttribute("text", "Senha ou login incorretos, essa conta é sua mesmo????");
-		mM.addAttribute("subtext", "Entre em contato com o suporte caso algo esteja fora do comum...");
+    @GetMapping("/login-error")
+    public String getErrorPage(ModelMap mM) {
+        mM.addAttribute("alert", "error");
+        mM.addAttribute("title", "Erro na tentativa de login");
+        mM.addAttribute("text", "Senha ou login incorretos, essa conta é sua mesmo????");
+        mM.addAttribute("subtext", "Entre em contato com o suporte caso algo esteja fora do comum...");
 
-		return "login";
-	}
+        return "login";
+    }
 
-	@PostMapping("/register")
-	public String registerUser(NewAccountDTO newAccountDTO, RedirectAttributes attr) {
-		User user = new User(newAccountDTO);
+    @PostMapping("/register")
+    public String registerUser(NewAccountDTO newAccountDTO, RedirectAttributes attr) {
+        User user = new User(newAccountDTO);
 
-		List<Authority> authorities = new ArrayList<Authority>();
+        List<Authority> authorities = new ArrayList<Authority>();
 
-		Authority authority = authorityRepository.findById(2L);
+        Authority authority = authorityRepository.findById(2L);
 
-		authorities.add(authority);
+        authorities.add(authority);
 
-		user.setAuthorities(authorities);
+        user.setAuthorities(authorities);
 
-		Account account = new Account(newAccountDTO.password(), newAccountDTO.passwordTransaction(), user);
+        Account account = new Account(newAccountDTO.password(), newAccountDTO.passwordTransaction(), user);
 
-		try {
-			accountService.saveAccount(account);
-		} catch (DataIntegrityViolationException ex) {
-			attr.addFlashAttribute("alert", "error");
-			attr.addFlashAttribute("title", "Erro ao criar conta");
-			attr.addFlashAttribute("text", ex.getMessage());
-			attr.addFlashAttribute("subtext", "Entre em contato com o suporte para saber mais.");
+        try {
+            accountService.saveAccount(account);
+        } catch (DataIntegrityViolationException ex) {
+            attr.addFlashAttribute("alert", "error");
+            attr.addFlashAttribute("title", "Erro ao criar conta");
+            attr.addFlashAttribute("text", ex.getMessage());
+            attr.addFlashAttribute("subtext", "Entre em contato com o suporte para saber mais.");
 
-			attr.addFlashAttribute("account", account);
-			return "redirect:/user/register";
-		}
+            attr.addFlashAttribute("account", account);
+            return "redirect:/user/register";
+        }
 
-		attr.addFlashAttribute("alert", "success");
-		attr.addFlashAttribute("title", "Conta criada com sucesso");
-		attr.addFlashAttribute("text", "Número da conta enviado para o email cadastrado.");
-		attr.addFlashAttribute("subtext", "Obrigado por escolher esse banco nada confiável.");
+        attr.addFlashAttribute("alert", "success");
+        attr.addFlashAttribute("title", "Conta criada com sucesso");
+        attr.addFlashAttribute("text", "Número da conta enviado para o email cadastrado.");
+        attr.addFlashAttribute("subtext", "Obrigado por escolher esse banco nada confiável.");
 
-		return "redirect:/user/login";
-	}
+        return "redirect:/user/login";
+    }
 
-	@GetMapping("/dashboard")
-	public ModelAndView getDashboardPage() {
-		ModelAndView view = new ModelAndView("user-dashboard");
+    @GetMapping("/dashboard")
+    public ModelAndView getDashboardPage() {
+        ModelAndView view = new ModelAndView("user-dashboard");
 
-		view.addObject("userData", userDataService.data());
+        view.addObject("userData", userDataService.data());
 
-		return view;
-	}
+        return view;
+    }
 
-	@GetMapping("/verify-role-user")
-	public String verifyRole() {
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @GetMapping("/verify-role-user")
+    public String verifyRole() {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (principal == null) return "index";
+        if (principal == null) return "index";
 
-		if (principal.getAuthorities().stream()
-				.anyMatch(authority -> authority.getAuthority().equals("admin"))) {
-			return "redirect:/admin/dashboard";
-		}
+        if (principal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("admin"))) {
+            return "redirect:/admin/dashboard";
+        }
 
-		return "redirect:/user/dashboard";
-	}
+        return "redirect:/user/dashboard";
+    }
 
-	@GetMapping("/update/{login}")
-	public ModelAndView getUpdateAccount(@PathVariable int login) {
-		ModelAndView view = new ModelAndView("update-account");
+    @GetMapping("/update/{login}")
+    public ModelAndView getUpdateAccount(@PathVariable int login) {
+        ModelAndView view = new ModelAndView("update-account");
 
-		view.addObject("account", accountService.findByNumberAccount(login));
+        view.addObject("account", accountService.findByNumberAccount(login));
 
-		return view;
-	}
+        return view;
+    }
 
-	@PostMapping("/update/account")
-	public String updateAccount(HttpServletRequest request, Account account, RedirectAttributes attr) {
-		accountService.updateAccount(account);
+    @PostMapping("/update/account")
+    public String updateAccount(HttpServletRequest request, Account account, RedirectAttributes attr) {
+        accountService.updateAccount(account);
 
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
-		}
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
 
-		attr.addFlashAttribute("alert", "success");
-		attr.addFlashAttribute("title", "Dados alterados com sucesso");
-		attr.addFlashAttribute("text", "Faça login novamente para concluir a alteração.");
-		attr.addFlashAttribute("subtext", "Entre em contato com o suporte caso algo esteja fora do comum...");
+        attr.addFlashAttribute("alert", "success");
+        attr.addFlashAttribute("title", "Dados alterados com sucesso");
+        attr.addFlashAttribute("text", "Faça login novamente para concluir a alteração.");
+        attr.addFlashAttribute("subtext", "Entre em contato com o suporte caso algo esteja fora do comum...");
 
-		return "redirect:/user/login";
-	}
+        return "redirect:/user/login";
+    }
 
 
 }
