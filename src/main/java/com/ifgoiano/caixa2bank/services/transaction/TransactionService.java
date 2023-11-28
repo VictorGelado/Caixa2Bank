@@ -7,7 +7,6 @@ import com.ifgoiano.caixa2bank.entities.transaction.TransactionDTO;
 import com.ifgoiano.caixa2bank.exception.TransactionError;
 import com.ifgoiano.caixa2bank.repository.TransactionRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,7 +52,7 @@ public class TransactionService {
             else if (tr.value() == null)
                 throw new TransactionError("O valor da transação deve ser maior que 0.");
 
-            else if (tr.value().compareTo(BigDecimal.ZERO) == 0 || tr.value().compareTo(BigDecimal.ZERO) < 0 )
+            else if (tr.value().compareTo(BigDecimal.ZERO) == 0 || tr.value().compareTo(BigDecimal.ZERO) < 0)
                 throw new TransactionError("O valor da transação deve ser maior que 0.");
 
             else if (!(sender.getBalance().compareTo(tr.value()) >= 0))
