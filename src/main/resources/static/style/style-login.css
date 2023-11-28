@@ -1,15 +1,25 @@
-/*style-register*/
+/*style 2*/
 /*para celulares e tablets*/
-@media ( max-width: 900px) {
+@media (max-width: 900px) {
     .body {
         background: #f3f3f3;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
 
+        transform: translate(-50%, -50%);
     }
 
     .form-login {
         background-color: rgb(255, 255, 255);
-        width: 400px;
-        height: 900px;
+        width: 500px;
+        height: 500px;
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -21,6 +31,8 @@
         height: 100%;
         padding: 40px;
         font-family: 'Inter', sans-serif;
+        text-align: center;
+
     }
 
     .metade-esquerda {
@@ -43,15 +55,21 @@
         width: auto;
         height: 100px;
         padding: 0;
+
     }
 
-    .title-header {
-        display: grid;
-        justify-content: center;
-        text-align: left;
-        padding-top: auto;
-        color: black;
-    }
+    .title-header
+
+!important; {
+    display: grid;
+    justify-content: center;
+    text-align: left;
+    padding-top: auto;
+    color: black;
+
+
+}
+
 
     legend {
         display: none; /* Para ocultar o texto do legend */
@@ -63,6 +81,7 @@
         text-align: center;
         bottom: 0;
         padding-top: 100px;
+
     }
 
     .navigation {
@@ -96,28 +115,28 @@
         gap: 16px;
     }
 
-    /* Estilos do bot�o amarelo */
+    /* Estilos do bot�o  */
     .btn-primary {
-        background-color: #7c7c7c;
+        background-color: #7e7e7e;
         color: #ffffff;
         border: none;
-        padding: 5px;
+        width: 100%;
+        justify-content: center;
         text-align: center;
-        display: inline-block;
+        display: flex;
         font-size: 30px;
-        border-radius: 5px;
+        border-radius: 15px;
         cursor: pointer;
     }
 
     /* Estiliza��o quando o mouse passa por cima do bot�o */
     .btn-primary:hover {
-        background-color: #7e7e7e;
-        /* Altera a cor de fundo quando o mouse passa por cima */
+        background-color: #585858; /* Altera a cor de fundo quando o mouse passa por cima */
     }
 
 }
 
-@media ( min-width: 900px) {
+@media (min-width: 900px) {
     .body {
         background: #f3f3f3;
         margin: 0;
@@ -131,34 +150,29 @@
         left: 50%;
 
         transform: translate(-50%, -50%);
+
+
     }
 
     .form-login {
         background-color: rgb(255, 255, 255);
         width: 500px;
-        height: 650px;
+        height: 600px;
         padding: 20px;
         border-radius: 0px 15px 15px 0px;
         font-family: 'Inter', sans-serif;
     }
 
-    .alert-msg {
-        position: absolute;
-        top: 10%;
-        right: 60%;
-    }
-
     .metade-direita, .metade-esquerda {
-
         box-shadow: 0px 4px 15px rgba(0, 0, 0, 1);
         border-radius: 15px;
-        box-shadow: 0px 4px 15px rgba(0, 0, 0, 1);
     }
 
     .image-1 {
+
         border-radius: 15px 0px 0px 15px;
         min-width: 350px;
-        height: 650px;
+        height: 600px;
         object-fit: cover;
     }
 
@@ -168,11 +182,15 @@
         font-family: 'Inter', sans-serif;
     }
 
+
     .title-header {
         text-align: center;
-        font-weight: 900;
+
+        font-weight: 900 !important;
         color: #000000;
+
     }
+
 
     legend {
         display: none; /* Para ocultar o texto do legend */
@@ -197,7 +215,7 @@
 
     .link-primary {
         font-size: 20px;
-        color: #000000;
+        color: #7c7c7c;
         text-decoration: none;
         -webkit-text-stroke: 1px #000000;
         text-shadow: 1px #000000;
@@ -205,8 +223,8 @@
 
     .link-primary:hover {
         text-decoration: underline;
-
     }
+
 
     /* Estilos do bot�o*/
     .btn-primary {
@@ -224,12 +242,11 @@
 
     /* Estiliza��o quando o mouse passa por cima do bot�o */
     .btn-primary:hover {
-        background-color: #212121;
-
-        /* Altera a cor de fundo quando o mouse passa por cima */
+        background-color: #000000; /* Altera a cor de fundo quando o mouse passa por cima */
     }
 
     .input-no-border {
+
         border-top: none !important;
         border-left: none !important;
         border-right: none !important;
@@ -239,5 +256,7 @@
         border: none !important;
         outline: none !important;
     }
-
 }
+
+
+

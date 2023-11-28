@@ -19,7 +19,18 @@
     <title>Caixa 2 bank</title>
 </head>
 <body class="body">
+
+
 <div class="metade-esquerda">
+    <div class="text-center mb-4 alert-msg">
+        <div th:if="${alert != null}"
+             th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'" role="alert">
+            <h4 th:text="${title}" class="alert-heading"></h4>
+            <p th:text="${text}"></p>
+            <hr>
+            <p class="mb-0"><small th:text="${subtext}"></small></p>
+        </div>
+    </div>
     <img class="image-1" src="/images/pato.jpg"/>
 </div>
 <div class="metade-direita">
@@ -28,15 +39,7 @@
             <h1 class="title-header">Criar conta</h1>
         </header>
         <main>
-            <div class="text-center mb-4">
-                <div th:if="${alert != null}"
-                     th:class="${alert == 'error'} ? 'alert alert-danger' : 'alert alert-success'" role="alert">
-                    <h4 th:text="${title}" class="alert-heading"></h4>
-                    <p th:text="${text}"></p>
-                    <hr>
-                    <p class="mb-0"><small th:text="${subtext}"></small></p>
-                </div>
-            </div>
+
 
             <form th:action="@{/user/register}" method="post">
                 <fieldset class="mb-3">
@@ -52,7 +55,6 @@
                                id="password" name="password" required>
                         <span class="input-group-text view-password"><i
                                 class="fa-regular fa-eye"></i></span>
-
                     </div>
                 </fieldset>
 

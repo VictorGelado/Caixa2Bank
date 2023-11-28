@@ -4,6 +4,7 @@ import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.transaction.ListTransactionDTO;
 import com.ifgoiano.caixa2bank.entities.transaction.Transaction;
 import com.ifgoiano.caixa2bank.entities.transaction.TransactionDTO;
+import com.ifgoiano.caixa2bank.exception.TransactionError;
 import com.ifgoiano.caixa2bank.repository.TransactionRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import lombok.SneakyThrows;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,7 +34,6 @@ public class TransactionService {
         return new BCryptPasswordEncoder();
     }
 
-    @SneakyThrows
     public void send(TransactionDTO tr) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -40,18 +41,29 @@ public class TransactionService {
             Account receiver = accountService.findByPix(tr.receiver());
             Account sender = accountService.findByLogin(principal.getUsername());
 
-            if (receiver == sender) throw new Exception();
-
             if (receiver == null) receiver = accountService.findByNumberAccount(Integer.parseInt(tr.receiver()));
 
-            //LocalDateTime lDate = LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm"));
+            // Tests
+            if (receiver == null)
+                throw new TransactionError("Conta com a chave ou número da conta não foi encontrada. Chave: " + tr.receiver());
 
-            if (sender.getBalance().compareTo(tr.value()) >= 0 &&
-                    passwordEncoder().matches(tr.passwordTransaction(), sender.getPasswordTransaction())) {
-                receiver.setBalance(receiver.getBalance().add(tr.value()));
-                sender.setBalance(sender.getBalance().subtract(tr.value()));
-            } else throw new Exception("");
+            else if (receiver == sender)
+                throw new TransactionError("Não é possível fazer transações para si mesmo.");
 
+            else if (tr.value() == null)
+                throw new TransactionError("O valor da transação deve ser maior que 0.");
+
+            else if (tr.value().compareTo(BigDecimal.ZERO) == 0 || tr.value().compareTo(BigDecimal.ZERO) < 0 )
+                throw new TransactionError("O valor da transação deve ser maior que 0.");
+
+            else if (!(sender.getBalance().compareTo(tr.value()) >= 0))
+                throw new TransactionError("Saldo o suficiente para a transação.");
+
+            else if (!passwordEncoder().matches(tr.passwordTransaction(), sender.getPasswordTransaction()))
+                throw new TransactionError("Senha para a transação incorreta.");
+
+            receiver.setBalance(receiver.getBalance().add(tr.value()));
+            sender.setBalance(sender.getBalance().subtract(tr.value()));
 
             accountService.updateBalance(receiver.getNumber(), receiver.getBalance());
             accountService.updateBalance(sender.getNumber(), sender.getBalance());
