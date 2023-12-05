@@ -8,12 +8,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        position: absolute;
-        top: 50%;
-        left: 50%;
 
-        transform: translate(-50%, -50%);
     }
 
     .form-login {
@@ -58,17 +53,7 @@
 
     }
 
-    .title-header
 
-!important; {
-    display: grid;
-    justify-content: center;
-    text-align: left;
-    padding-top: auto;
-    color: black;
-
-
-}
 
 
     legend {
@@ -117,7 +102,7 @@
 
     /* Estilos do bot�o  */
     .btn-primary {
-        background-color: #7e7e7e;
+        background-color: #000000;
         color: #ffffff;
         border: none;
         width: 100%;
@@ -131,7 +116,14 @@
 
     /* Estiliza��o quando o mouse passa por cima do bot�o */
     .btn-primary:hover {
-        background-color: #585858; /* Altera a cor de fundo quando o mouse passa por cima */
+        background-color: #000000; /* Altera a cor de fundo quando o mouse passa por cima */
+    }
+    .title-header {
+        text-align: center;
+
+        font-weight: 900 !important;
+        color: #000000;
+
     }
 
 }

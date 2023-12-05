@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/admin/**").hasAuthority("admin")
 
-                        .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/user/register").hasAuthority("user")
                         .requestMatchers("/user/login", "/user/login-error", "/error").permitAll()
                         .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/user/update/*").hasAuthority("user")

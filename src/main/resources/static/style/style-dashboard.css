@@ -183,6 +183,11 @@
         font-family: 'Inter', sans-serif;
 
     }
+    .img-adm {
+        width: 50%;
+
+        border-radius: 15px;
+    }
 
     header {
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
@@ -200,7 +205,14 @@
         text-align: center;
         align-items: center;
     }
+    .font {
+        font-weight: 900;
+        font-size: 25px;
+        text-align: center;
+        color: #000000;
+        text-decoration: none;
 
+    }
     .card {
 
         width: 300px;

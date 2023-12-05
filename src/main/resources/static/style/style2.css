@@ -23,6 +23,11 @@
         font-family: 'Inter', sans-serif;
 
     }
+    .img-logo {
+        width: 150px;
+        height: 150px;
+
+    }
 
     .metade-esquerda {
         display: none;
@@ -139,6 +144,11 @@
         align-items: center;
         height: 100vh;
 
+
+    }
+    .img-logo {
+        width: 150px;
+        height: 150px;
 
     }
 

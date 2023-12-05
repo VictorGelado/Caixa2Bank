@@ -43,10 +43,6 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<Authority> authorities = user.getAuthorities();
 
-        for (Authority a : authorities) {
-            System.out.println(a.getName());
-        }
-
         return authorities.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                 .collect(Collectors.toList());

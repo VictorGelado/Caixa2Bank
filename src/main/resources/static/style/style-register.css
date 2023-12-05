@@ -46,13 +46,11 @@
     }
 
     .title-header {
-        display: grid;
-        justify-content: center;
-        text-align: left;
-        padding-top: auto;
-        color: black;
-    }
+        text-align: center;
+        font-weight: 900 !important;
+        color: #000000;
 
+    }
     legend {
         display: none; /* Para ocultar o texto do legend */
     }
@@ -98,20 +96,22 @@
 
     /* Estilos do bot�o amarelo */
     .btn-primary {
-        background-color: #7c7c7c;
+        background-color: #000000;
         color: #ffffff;
         border: none;
-        padding: 5px;
+        width: 100%;
+        justify-content: center;
         text-align: center;
-        display: inline-block;
+        display: flex;
         font-size: 30px;
-        border-radius: 5px;
+        border-radius: 15px;
         cursor: pointer;
     }
 
     /* Estiliza��o quando o mouse passa por cima do bot�o */
     .btn-primary:hover {
-        background-color: #7e7e7e;
+        background-color: #212121;
+
         /* Altera a cor de fundo quando o mouse passa por cima */
     }
 
@@ -121,31 +121,23 @@
     .body {
         background: #f3f3f3;
         margin: 0;
-        padding: 0;
+        padding: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        position: absolute;
-        top: 50%;
-        left: 50%;
+        min-height: 100vh;
 
-        transform: translate(-50%, -50%);
+
+
     }
 
     .form-login {
         background-color: rgb(255, 255, 255);
         width: 500px;
-        height: 650px;
+        height: 850px;
         padding: 20px;
         border-radius: 0px 15px 15px 0px;
         font-family: 'Inter', sans-serif;
-    }
-
-    .alert-msg {
-        position: absolute;
-        top: 10%;
-        right: 60%;
     }
 
     .metade-direita, .metade-esquerda {
@@ -158,7 +150,7 @@
     .image-1 {
         border-radius: 15px 0px 0px 15px;
         min-width: 350px;
-        height: 650px;
+        height: 850px;
         object-fit: cover;
     }
 
@@ -227,6 +219,9 @@
         background-color: #212121;
 
         /* Altera a cor de fundo quando o mouse passa por cima */
+    }
+    .img-adm{
+        width: 50;
     }
 
     .input-no-border {

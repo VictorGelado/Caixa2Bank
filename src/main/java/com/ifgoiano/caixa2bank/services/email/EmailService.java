@@ -1,7 +1,6 @@
 package com.ifgoiano.caixa2bank.services.email;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
-import com.ifgoiano.caixa2bank.repository.AccountRepository;
 import com.ifgoiano.caixa2bank.services.account.AccountService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
