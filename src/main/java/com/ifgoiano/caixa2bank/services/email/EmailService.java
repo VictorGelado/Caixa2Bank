@@ -1,9 +1,12 @@
 package com.ifgoiano.caixa2bank.services.email;
 
 import com.ifgoiano.caixa2bank.entities.account.Account;
+import com.ifgoiano.caixa2bank.repository.AccountRepository;
+import com.ifgoiano.caixa2bank.services.account.AccountService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +22,10 @@ public class EmailService {
 
     @Autowired
     private SpringTemplateEngine template;
+
+    @Autowired
+    @Lazy
+    private AccountService accountService;
 
 
     public void sendEmail(String to, String subject, String body) {
@@ -47,5 +54,15 @@ public class EmailService {
         helper.setFrom("Caixa2Bank");
 
         mailSender.send(message);
+    }
+
+    public void sendEmailCreatedAccount(String cpf) {
+        Account account = accountService.findByLogin(cpf);
+
+        String email = account.getUser().getEmail();
+        String subject = "Conta criada com sucesso!";
+        String msg = "O número da sua conta para o acesso é: " + account.getNumber();
+
+        this.sendEmail(email, subject, msg);
     }
 }

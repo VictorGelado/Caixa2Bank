@@ -3,7 +3,6 @@ package com.ifgoiano.caixa2bank.services.account;
 import com.ifgoiano.caixa2bank.entities.account.Account;
 import com.ifgoiano.caixa2bank.entities.account.DepositDTO;
 import com.ifgoiano.caixa2bank.repository.AccountRepository;
-import com.ifgoiano.caixa2bank.services.email.EmailCreateUserService;
 import com.ifgoiano.caixa2bank.services.email.EmailService;
 import com.ifgoiano.caixa2bank.utils.ReturnAccountByLogin;
 import jakarta.mail.MessagingException;
@@ -30,9 +29,6 @@ public class AccountService {
 
     @Autowired
     private ReturnAccountByLogin returnAccountByLogin;
-
-    @Autowired
-    private EmailCreateUserService emailToUserService;
 
     @Autowired
     private EmailService emailService;
@@ -73,8 +69,6 @@ public class AccountService {
 
         Account nAccount = new Account(password, passwordTransaction, account.getUser());
 
-        System.out.println(account.getUser().getCpf());
-
         if (repository.findByCpf(account.getUser().getCpf()) != null) {
             throw new DataIntegrityViolationException("CPF já cadastrado.");
         } else if (repository.findByEmail(account.getUser().getEmail()) != null) {
@@ -85,7 +79,7 @@ public class AccountService {
 
         repository.save(nAccount);
 
-        emailToUserService.sendEmailCreatedAccount(account.getUser().getCpf());
+        emailService.sendEmailCreatedAccount(nAccount.getUser().getCpf());
     }
 
     public Account findByLogin(String login) {
